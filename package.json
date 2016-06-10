@@ -1,0 +1,31 @@
+{
+  "name": "WaitlistDashboard",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "build": "watchify -v -t [ babelify --presets [es2015 react] ] ./public/javascripts/app.js -o ./public/javascripts/bundle.js"
+  },
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "body-parser": "~1.13.2",
+    "browserify": "^13.0.1",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "ejs": "^2.3.4",
+    "express": "~4.13.1",
+    "morgan": "~1.6.1",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "serve-favicon": "~2.3.0",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0"
+  }
+}
