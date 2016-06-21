@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 
 // app.use(express.static(("#{__dirname}/app")))
-app.use(express.static("app"))
+app.use(express.static("client"))
 
 app.use("/", routes)
 // app.use("/users", users)

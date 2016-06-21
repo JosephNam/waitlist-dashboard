@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./server/bin/www",
-    "build": "mkdir -p app/client && browserify -v -t [ babelify --presets [es2015 react] ] ./client/src/*.js -o ./app/client/bundle.js",
-    "watch": "echo $PWD && watchify -v -t [ babelify --presets [es2015 react] ] ./client/src/*.js -o ./app/client/bundle.js"
+    "build": "bin/build.sh",
+    "docker:build": "bin/docker-build.sh",
+    "watch": "echo $PWD && watchify -v -t [ babelify --presets [es2015 react] ] ./client/src/*.js -o ./client/bundle.js"
   },
   "dependencies": {
     "babel": "^6.5.2",
