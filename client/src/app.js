@@ -1,34 +1,50 @@
 /* @flow */
-import React, { PropTypes } from "react"
+import React from "react"
 import ReactDOM from "react-dom"
-import Dashboard from "./components/Dashboard.jsx"
+import { Provider } from "react-redux"
+import Dashboard from "./components/Dashboard"
+import Store from "./Store"
 
-let data = [
-  {
+// import { List, Map } from "immutable"
+
+
+/* let dummydata = new List([
+  new Map({
     name: "predicted",
-    value: 98
-  },
-  {
+    x: 1,
+    y: 86
+  }),
+  new Map({
     name: "host",
-    value: 48
-  },
-  {
+    x: 2,
+    y: 48
+  }),
+  new Map({
     name: "suggested",
-    value: 60
-  }
-]
+    x: 3,
+    y: 60
+  }),
+  new Map({
+    name: "projected",
+    x: 4,
+    y: 70
+  }),
+  new Map({
+    name: "expiremental",
+    x: 5,
+    y: 68
+  }),
+  new Map({
+    name: "expiremental algo 2",
+    x: 6,
+    y: 65
+  })
+])
+*/
 
-class App extends React.Component {
+ReactDOM.render(
+  <Provider store={Store}>
+    <Dashboard />
+  </Provider>,
+  document.getElementById("content"))
 
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return (
-      <Dashboard data={data} elementName="chart" />
-    )
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById("content"))

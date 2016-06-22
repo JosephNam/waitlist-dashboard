@@ -1,7 +1,15 @@
 # waitlist-dashboard
+visualizing waitlist prediction times and mixpanel funnels
 
-# install and run 
-npm start
+#Breakdown of the app (tentative)
+###  server requests data from three possible sources
+  - Source for mixpanel
+  - source for spark stuff
+  - source for actual historical data
 
-# Build client side app
-npm run build
+### server sends data to client
+  - [data] -> [visualization container] -> [visualization]
+
+### if client chooses diff type of vis than the current
+  - [visualization container] -> [action] -> [reducer] -> [store] -> [update visualization component]
+

@@ -19,10 +19,16 @@
     "debug": "~2.2.0",
     "ejs": "^2.3.4",
     "express": "~4.13.1",
+    "jasmine-node": "^1.14.5",
     "morgan": "~1.6.1",
+    "phantomjs-prebuilt": "^2.1.7",
     "react": "^15.1.0",
+    "react-addons-test-utils": "^15.1.0",
     "react-dom": "^15.1.0",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
     "serve-favicon": "~2.3.0",
+    "victory": "^0.9.0",
     "watchify": "^3.7.0"
   },
   "devDependencies": {
@@ -34,5 +40,21 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.4.0",
     "eslint-plugin-react": "^5.1.1"
-  }
+  },
+  "description": "visualizing waitlist prediction times and mixpanel funnels",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosephNam/waitlist-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JosephNam/waitlist-dashboard/issues"
+  },
+  "homepage": "https://github.com/JosephNam/waitlist-dashboard#readme"
 }
