@@ -6,6 +6,25 @@
 const app = require("../server")
 const debug = require("debug")("WaitlistDashboard:server")
 const http = require("http")
+const discovery = require("ot-discovery")
+const config = require("../config")
+let disco = {}
+
+function makeDisco(host = "none", name = "dev-waitlist-dashboard") {
+  disco = new discovery(host, [host], "pp-uswest2", name, {})
+}
+
+(() => {
+  let host = "none"
+  let name = "dev-waitlist-dashboard"
+  if (config.discovery && config.discovery.host) {
+    host = config.discovery.host
+  }
+  if (config.discovery && config.discovery.name) {
+    name = config.discovery.name
+  }
+  makeDisco(host, name)
+})()
 
 /**
  * Normalize a port into a number, string, or false.
@@ -29,7 +48,7 @@ function normalizePort(val) {
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || "3000")
+const port = normalizePort(process.env.PORT0 || "3000")
 app.set("port", port)
 
 /**
@@ -64,6 +83,24 @@ function onError(error) {
  */
 const server = http.createServer(app)
 
+function exitGracefully(code = 0) {
+  if (config.env !== "preprod") {
+    return process.exit(code)
+  }
+
+  disco.unannounce(() => {
+    server.close(() => {
+      process.exit(code)
+    })
+
+    setTimeout(() => {
+      process.exit(code)
+    }, 5000)
+  })
+  return 0
+}
+
+
 /**
  * Event listener for HTTP server "listening" event.
  */
@@ -72,7 +109,22 @@ function onListening() {
   const bind = typeof addr === "string"
     ? `pipe ${addr}`
     : `port ${addr.port}`
-  debug(`Listening on ${bind}`)
+
+  if (config.env === "preprod") {
+    disco.connect((err) => {
+      if (err) exitGracefully(1)
+    })
+    disco.announce({
+      serviceType: config.discovery.name,
+      serviceUri: `http://${config.host}:${config.port}`
+    }, (err) => {
+      if (err) {
+        if (err) exitGracefully(1)
+      }
+    })
+
+    debug(`Listening on ${bind}`)
+  }
 }
 
 /**

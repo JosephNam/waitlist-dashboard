@@ -1,0 +1,11 @@
+{
+  "requestId": "pp-waitlist-dashboard",
+  "resources": {
+    "cpus": 0.5,
+    "memoryMb": 512,
+    "numPorts": 1
+  },
+  "env": {
+    "ENV": "preprod"
+  }
+}

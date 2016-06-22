@@ -1,0 +1,12 @@
+{
+  "id": "pp-waitlist-dashboard",
+  "requestType": "SERVICE",
+  "owners": [
+    "sbeck@opentable.com",
+    "jnam@opentable.com"
+  ],
+  "instances": 1,
+  "rackSensitive": false,
+  "loadBalanced": false,
+  "rackAffinity": []
+}

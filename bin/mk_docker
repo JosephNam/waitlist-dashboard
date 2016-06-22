@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eu
+
+repo="docker.otenv.com/waitlist-dashboard"
+tag="latest"
+
+docker build --pull -t "${repo}:${tag}" .
+docker push "${repo}:${tag}"

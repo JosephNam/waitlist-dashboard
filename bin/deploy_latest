@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eu
+
+toplevel=$(git rev-parse --show-toplevel)
+
+cd "${toplevel}/server"
+otpl-deploy -d waitlist-dashboard pp-uswest2 latest

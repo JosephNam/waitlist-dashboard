@@ -13,4 +13,8 @@ router.get("/favicon.ico", (req, res) => {
   res.send()
 })
 
+router.get("/health", (req, res) => {
+  res.send({ healthy: true })
+})
+
 module.exports = router
