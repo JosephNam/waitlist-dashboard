@@ -3,6 +3,7 @@ import * as V from "victory"
 import { connect } from "react-redux"
 import Visualization from "../components/Visualization"
 
+// TODO need to refactor these nested components into our own components for less verbosity
 const getVisibleVisualization = (filter) => {
   switch (filter) {
     case "BAR_GRAPH":

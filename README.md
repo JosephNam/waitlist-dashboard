@@ -6,6 +6,8 @@ Visualize waitlist prediction times and mixpanel funnels.
 * `npm start` -- starts server on localhost:3000
 * `npm watch` -- watches and builds client js
 * `npm run build` -- builds all and copies to /app for deployment
+* `npm test` -- runs all tests for client and server
+* `npm test:watch` -- runs all tests and watches
 
 ## Deployment
 #### Prereqs

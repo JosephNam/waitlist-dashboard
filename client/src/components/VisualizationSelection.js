@@ -10,6 +10,7 @@ const VisualizationSelection = ({ list }) => (
   <div>
   {list.map((item, index) => (
     <button
+      className="filter-switcher waves-effect waves-light btn"
       key={index}
       onClick={() => { switchFilter(item) }}
     >
