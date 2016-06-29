@@ -1,0 +1,21 @@
+{
+  "name": "waitlist-dashboard",
+  "description": "visualizing waitlist prediction times and mixpanel funnels",
+  "main": "index.js",
+  "authors": [
+    "Yufan Zhuang <zhuangyufan@aol.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/AfterDreaming/waitlist-dashboard",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "Materialize": "materialize#^0.97.6"
+  }
+}

@@ -35,3 +35,23 @@ Visualize waitlist prediction times and mixpanel funnels.
 
 ### if client chooses diff type of vis than the current
   - [visualization container] -> [action] -> [reducer] -> [store] -> [update visualization component]
+
+---
+
+## Bower to grab javascript libraries
+
+This app use [bower](http://bower.io/) (a packaging system for javascript) to
+grab jquery and Materialize. The`bower.json`file indicates the libraries (and minimal versions) to get.
+
+- To install bower, you need [npm](https://www.npmjs.com/) (the
+  [node](https://nodejs.org/download/) package manager)
+
+      `npm install -g bower`
+
+- Install these packages (indicated within the `bower.json` file)
+
+      `bower install`
+
+- To update the packages
+
+      `bower update`
