@@ -2,10 +2,12 @@
 Visualize waitlist prediction times and mixpanel funnels.
 
 ## Local Development
-* `npm install` -- install dependencies
+* `bower install` -- install client dependencies
+* `npm install` -- install server dependencies
 * `npm start` -- starts server on localhost:3000
-* `npm watch` -- watches and builds client js
 * `npm run build` -- builds all and copies to /app for deployment
+* `npm run build:watch` -- watches and builds client js
+* `npm run build:docker` -- builds docker image for deployment
 * `npm test` -- runs all tests for client and server
 * `npm test:watch` -- runs all tests and watches
 
@@ -15,18 +17,19 @@ Visualize waitlist prediction times and mixpanel funnels.
 
 #### Steps to deploy
 * `npm run build`
-* `bin/mk_docker`
-* `bin/deploy_latest`
+* `npm run build:docker`
+* `npm run deploy`
 
-#### Quick links
-* [Discovery PP](http://discovery-pp-uswest2.otenv.com/web/state.html?queries[search]=waitlist-dashboard)
-* [Singularity Request](http://singularity-qa-uswest2.otenv.com/request/pp-waitlist-dashboard)
+## Quick links
+* [PP Waitlist-Dashboard](http://waitlist-dashboard.otenv.com/)
+* [PP Discovery](http://discovery-pp-uswest2.otenv.com/web/state.html?queries[search]=waitlist-dashboard)
+* [PP Singularity Request](http://singularity-qa-uswest2.otenv.com/request/pp-waitlist-dashboard)
 
 ----
 
 ## Breakdown of the code structure (WIP)
 ### server requests data from three possible sources
-  - Source for mixpanel
+  - source for mixpanel
   - source for spark stuff
   - source for actual historical data
 
@@ -35,23 +38,3 @@ Visualize waitlist prediction times and mixpanel funnels.
 
 ### if client chooses diff type of vis than the current
   - [visualization container] -> [action] -> [reducer] -> [store] -> [update visualization component]
-
----
-
-## Bower to grab javascript libraries
-
-This app use [bower](http://bower.io/) (a packaging system for javascript) to
-grab jquery and Materialize. The`bower.json`file indicates the libraries (and minimal versions) to get.
-
-- To install bower, you need [npm](https://www.npmjs.com/) (the
-  [node](https://nodejs.org/download/) package manager)
-
-      `npm install -g bower`
-
-- Install these packages (indicated within the `bower.json` file)
-
-      `bower install`
-
-- To update the packages
-
-      `bower update`

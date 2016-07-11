@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node ./server/bin/www",
-    "build": "bin/build.sh",
-    "docker:build": "bin/docker-build.sh",
+    "build": "bin/build_app",
+    "build:docker": "bin/build_docker",
     "build:watch": "echo $PWD && start watchify -v -t [ babelify --presets [es2015 react] ] ./client/src/*.js -o ./client/bundle.js",
     "test": "nyc ava && nyc report --reporter=html",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "deploy": "bin/deploy_latest"
   },
   "ava": {
     "files": [
