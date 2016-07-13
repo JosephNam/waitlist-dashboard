@@ -14,6 +14,7 @@ Visualize waitlist prediction times and mixpanel funnels.
 ## Deployment
 #### Prereqs
 * Install [otpl-deploy-scripts](https://github.com/opentable/otpl-deploy-scripts) and make sure otpl-deploy is in your shell PATH.
+* Install JDK 8
 
 #### Steps to deploy
 * `npm run build`

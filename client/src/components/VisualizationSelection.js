@@ -6,10 +6,12 @@ function switchFilter(filter) {
   console.log(filter)
   Store.dispatch(setVisualizationFilter(filter))
 }
+
 const VisualizationSelection = ({ list }) => (
   <div>
   {list.map((item, index) => (
     <button
+      id={`button${index}`}
       className="filter-switcher waves-effect waves-light btn"
       key={index}
       onClick={() => { switchFilter(item) }}

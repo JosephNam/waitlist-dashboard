@@ -1,7 +1,8 @@
 node_modules/*
 app/*
-.nyc_output
-coverage
+.nyc_output/*
+coverage/*
 bower_components
 bundle.js
+reports/*
 .DS_Store
