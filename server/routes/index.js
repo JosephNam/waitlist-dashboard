@@ -1,34 +1,34 @@
 const express = require("express")
 const router = new express.Router()
-const logger = require('ot-logger')
-var fs = require('fs');
-var development = process.env.NODE_ENV !== 'production';
-
+const logger = require("ot-logger")
+const fs = require("fs")
+const development = process.env.NODE_ENV !== "production"
 
 router.get("/", (req, res) => {
-  logger.info('received request to /')
-  	  res.render("index")
+  logger.info("received request to /")
+  res.render("index")
 })
 
 router.get("/favicon.ico", (req, res) => {
-  logger.info('received request to /favicon.ico')
+  logger.info("received request to /favicon.ico")
   res.send()
 })
 
 router.get("/health", (req, res) => {
-  logger.info('received request to /health')
+  logger.info("received request to /health")
   res.send({ healthy: true })
 })
 
-router.get("/mock", (req, res) => {
-  logger.info('received request to /')
-  if(development){
-  	const mockdata = fs.readFileSync("./dev/data/data.json", 'utf8')
-  	//console.log(mockdata);
-  	res.json(mockdata)
-  } else{
-  	  res.render("index")
-  	}
+router.get("/estimates", (req, res) => {
+  logger.info("received request to /mock")
+  if (development) {
+    const mockData = JSON.parse(
+      fs.readFileSync("./server/mocks/waitlistService/singleRid.json", "utf8"))
+    res.setHeader("Content-Type", "application/json")
+    res.json(mockData)
+  } else {
+    res.render("index")
+  }
 })
 
 module.exports = router
