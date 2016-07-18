@@ -7,14 +7,14 @@ const bodyParser = require("body-parser")
 const routes = require("./routes/index")
 // const users = require("./routes/users")
 
-logger.init()
+//logger.init()
 // using let
 const app = express()
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
 
-app.use(logger.middleware)
+//app.use(logger.middleware)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
