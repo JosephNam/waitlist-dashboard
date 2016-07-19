@@ -6,3 +6,5 @@ bower_components
 bundle.js
 reports/*
 .DS_Store
+
+client/output/*

@@ -1,9 +1,10 @@
 const express = require("express")
 const path = require("path")
 // const favicon = require("serve-favicon")
-const logger = require("ot-logger")
+// const logger = require("ot-logger")
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
+const pkg = require("../package")
 const routes = require("./routes/index")
 // const users = require("./routes/users")
 

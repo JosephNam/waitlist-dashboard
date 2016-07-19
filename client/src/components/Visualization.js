@@ -1,12 +1,10 @@
 import React, { PropTypes } from "react"
-import { VictoryChart } from "victory"
 
 const Visualization = (props) => (
-  <VictoryChart
-    domainPadding={{ x: 50 }}
-  >
-    {props.children}
-  </VictoryChart>
+  <div>
+    <p> Waitlist Visualization </p>
+    {props.children.graph}
+  </div>
 )
 
 Visualization.propTypes = {
