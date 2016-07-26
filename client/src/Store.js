@@ -1,7 +1,12 @@
-import { applyMiddleware, createStore } from "redux"
+import { applyMiddleware, createStore, combineReducers } from "redux"
 import thunk from "redux-thunk"
-import visualizationApp from "./reducers/VisualizationReducers"
+import visualization from "./reducers/VisualizationReducers"
+import dashboard from "./reducers/DashboardReducer"
 
-const Store = createStore(visualizationApp, applyMiddleware(thunk))
+const Store = createStore(combineReducers({
+  visualization,
+  dashboard
+}), applyMiddleware(thunk))
 
+let unsubscribe = Store.subscribe(() => console.log(Store.getState()))
 export default Store

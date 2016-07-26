@@ -1,18 +1,23 @@
 import { Map } from "immutable"
-import { SET_VISUALIZATION_FILTER, VisualizationFilters } from "../actions/VisualizationActions"
+import { SET_VISUALIZATION_FILTER, VisualizationFilters,
+  REQUEST_DATA, RECEIVE_DATA
+} from "../actions/VisualizationActions"
 
 const initialState = new Map({
   visualizationFilter: VisualizationFilters.BAR_GRAPH
 })
 
-export default function visualizationApp(state = initialState, action) {
+export default function visualization(state = initialState, action) {
   switch (action.type) {
     case SET_VISUALIZATION_FILTER:
-      return new Map({
-        visualizationFilter: action.filter
-      })
+      return state.set("visualizationFilter", action.filter)
+    case RECEIVE_DATA:
+      return state.set("data", action.data)
+        .set("isLoadingData", false)
+        .set("dataFilter", action.dataFilter)
+    case REQUEST_DATA:
+      return state.set("isLoadingData", true)
     default:
-      console.log("hello")
       return state
   }
 }

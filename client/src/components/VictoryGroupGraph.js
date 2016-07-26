@@ -35,39 +35,5 @@ export default class VictoryGroupGraph extends React.Component {
     */
   }
 
-  getData() {
-    const i = Math.floor(Math.random() * (3 - 0))
-    const j = Math.floor(Math.random() * (3 - 0))
-    this.state.data[i][j] = { x: this.state.data[i][j].x, y: 1 }
-    return this.state.data
-  }
-
-  render() {
-    return (
-      <VictoryChart
-        height={500}
-        domainPadding={{ x: 50 }}
-      >
-        <VictoryGroup
-          height={600}
-          offset={15}
-          colorScale={"qualitative"}
-          animate={{
-            duration: 500,
-            onExit: {
-              duration: 1000,
-              before: () => ({ y: - 1 })
-            }
-          }}
-        >
-          {this.state.data.map((data, i) => (
-            <VictoryBar
-              data={data} key={i}
-            />
-          ))}
-        </VictoryGroup>
-      </VictoryChart>
-    )
-  }
 }
 

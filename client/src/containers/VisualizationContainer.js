@@ -2,16 +2,17 @@ import { connect } from "react-redux"
 import { getVisible } from "../helpers/VisualizationHelpers"
 import Visualization from "../components/Visualization"
 
-const mapStatetoProps = (state) => (
+const mapStateToProps = (state) => (
   {
     children: {
-      graph: getVisible(state.get("visualizationFilter"))
+      graph: getVisible(state.visualization.get("visualizationFilter"),
+        state.dashboard.get("data"))
     }
   }
 )
 
 const VisibleVisualization = connect(
-  mapStatetoProps
+  mapStateToProps
 )(Visualization)
 
 export default VisibleVisualization

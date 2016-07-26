@@ -30,9 +30,7 @@ VisualizationSelection.defaultProps = {
   list: [
     VisualizationFilters.BAR_GRAPH,
     VisualizationFilters.SCATTER_PLOT,
-    VisualizationFilters.AREA_GRAPH,
-    VisualizationFilters.STACKED_BAR_GRAPH,
-    VisualizationFilters.GROUPED_BAR_GRAPH
+    VisualizationFilters.LINE_GRAPH
   ]
 }
 

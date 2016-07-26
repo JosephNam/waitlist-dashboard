@@ -1,26 +1,17 @@
 import React from "react"
 import VictoryBarGraph from "../components/VictoryBarGraph"
 import VictoryScatterGraph from "../components/VictoryScatterGraph"
-import VictoryAreaGraph from "../components/VictoryAreaGraph"
 import VictoryLineGraph from "../components/VictoryLineGraph"
-import VictoryStackGraph from "../components/VictoryStackGraph"
-import VictoryGroupGraph from "../components/VictoryGroupGraph"
 
-export const getVisible = (filter) => {
+export const getVisible = (filter, data) => {
   switch (filter) {
     case "BAR_GRAPH":
-      return <VictoryBarGraph />
+      return <VictoryBarGraph data={data} />
     case "SCATTER_PLOT":
-      return <VictoryScatterGraph />
-    case "AREA_GRAPH":
-      return <VictoryAreaGraph />
+      return <VictoryScatterGraph data={data} />
     case "LINE_GRAPH":
-      return <VictoryLineGraph />
-    case "STACKED_BAR_GRAPH":
-      return <VictoryStackGraph />
-    case "GROUPED_BAR_GRAPH":
-      return <VictoryGroupGraph />
+      return <VictoryLineGraph data={data} />
     default:
-      return <VictoryBarGraph />
+      return <VictoryLineGraph data={data} />
   }
 }

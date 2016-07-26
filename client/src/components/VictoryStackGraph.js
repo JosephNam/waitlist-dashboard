@@ -1,38 +1,23 @@
 import React from "react"
-import { VictoryChart, VictoryBar, VictoryStack } from "victory"
+import { VictoryAxis, VictoryBar, VictoryStack } from "victory"
 
-const VictoryStackGraph = () => (
-  <VictoryChart
-    height={500}
-    domainPadding={{ x: 50 }}
-  >
+const VictoryStackGraph = (props) => (
+  <svg width={450} height={450}>
+    <VictoryAxis
+      label="x-axis"
+    />
+    <VictoryAxis dependentAxis
+      label="y-axis"
+    />
     <VictoryStack
       height={500}
       colorScale={"qualitative"}
     >
       <VictoryBar
-        data={[
-          { x: 1, y: 1 },
-          { x: 2, y: 2 },
-          { x: 3, y: 3 }
-        ]}
-      />
-      <VictoryBar
-        data={[
-          { x: 1, y: 2 },
-          { x: 2, y: 1 },
-          { x: 3, y: 1 }
-        ]}
-      />
-      <VictoryBar
-        data={[
-          { x: 1, y: 3 },
-          { x: 2, y: 4 },
-          { x: 3, y: 2 }
-        ]}
+        data={props.data}
       />
     </VictoryStack>
-  </VictoryChart>
+  </svg>
 )
 
 export default VictoryStackGraph

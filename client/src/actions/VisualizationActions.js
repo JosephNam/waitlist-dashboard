@@ -10,7 +10,8 @@ export const VisualizationFilters = {
   SCATTER_PLOT: "SCATTER_PLOT",
   GROUPED_BAR_GRAPH: "GROUPED_BAR_GRAPH",
   STACKED_BAR_GRAPH: "STACKED_BAR_GRAPH",
-  AREA_GRAPH: "AREA_GRAPH"
+  AREA_GRAPH: "AREA_GRAPH",
+  LINE_GRAPH: "LINE_GRAPH"
 }
 
 export function setVisualizationFilter(filter) {

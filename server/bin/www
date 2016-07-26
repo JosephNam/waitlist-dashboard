@@ -104,6 +104,7 @@ function exitGracefully(code = 0) {
 /**
  * Event listener for HTTP server "listening" event.
  */
+
 function onListening() {
   const addr = server.address()
   const bind = typeof addr === "string"
