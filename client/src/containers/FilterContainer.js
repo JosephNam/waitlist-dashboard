@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { setDataFilter } from "../actions/DashboardActions"
+import { fetchData } from "../actions/DashboardActions"
 
 import FilterInput from "../components/FilterInput"
 
@@ -11,7 +11,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => (
   {
-    submitFilters: (rid, start, end) => dispatch(setDataFilter({ rid, start, end }))
+    submitFilters: (rid, start, end) => dispatch(fetchData("/estimates",
+      {
+        restaurant_id: rid,
+        startstamp: start,
+        endstamp: end
+      }, false
+    ))
   }
 )
 

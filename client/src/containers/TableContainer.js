@@ -1,17 +1,23 @@
 import { connect } from "react-redux"
-import { getVisible } from "../helpers/VisualizationHelpers"
 import RestaurantsTable from "../components/RestaurantsTable"
+import { setSelectedRows } from "../actions/DashboardActions"
 
 const mapStateToProps = (state) => (
   {
-    children: {
-      data: state.dashboard.get("data")
-    }
+    data: state.dashboard.get("data"),
+    selectedRows: state.dashboard.get("selectedRows")
+  }
+)
+
+const mapDispatchToProps = (dispatch) => (
+  {
+    submitSelectedRows: (selectedRows, oldData) => dispatch(setSelectedRows(selectedRows, oldData))
   }
 )
 
 const VisibleRestaurantsTable = connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(RestaurantsTable)
 
 export default VisibleRestaurantsTable

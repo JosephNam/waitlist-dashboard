@@ -1,6 +1,9 @@
 /* global $: true */
 import React, { PropTypes } from "react"
 import "react-date-picker/index.css"
+import DatePicker from "material-ui/DatePicker"
+import TextField from "material-ui/TextField"
+import FlatButton from "material-ui/FlatButton"
 
 const propTypes = {
   submitFilters: PropTypes.func,
@@ -19,28 +22,8 @@ export default class FilterInput extends React.Component {
       end: 0
     }
     this.handleRIDChange = this.handleRIDChange.bind(this)
-  }
-
-  componentDidMount() {
-    $(".datepicker.startDate").pickadate({
-      selectMonths: true,
-      onClose: () => $(document.activeElement).blur(),
-      onSet: (ele) => {
-        if (ele.select) {
-          this.state.start = ele.select
-        }
-      }
-    })
-
-    $(".datepicker.endDate").pickadate({
-      selectMonths: true,
-      onClose: () => $(document.activeElement).blur(),
-      onSet: (ele) => {
-        if (ele.select) {
-          this.state.end = ele.select
-        }
-      }
-    })
+    this.handleStart = this.handleStart.bind(this)
+    this.handleEnd = this.handleEnd.bind(this)
   }
 
   submit() {
@@ -53,11 +36,17 @@ export default class FilterInput extends React.Component {
 
   handleRIDChange(e) {
     this.state.rid = e.target.value
-    console.log(this.state)
+  }
+
+  handleStart(e, date) {
+    this.state.start = date.valueOf()
+  }
+
+  handleEnd(e, date) {
+    this.state.end = date.valueOf()
   }
 
   render() {
-    let ridInput
     return (
       <div className="row">
         <form
@@ -65,49 +54,40 @@ export default class FilterInput extends React.Component {
           className="col s12"
           onSubmit={e => {
             e.preventDefault()
-            if (!ridInput.value.trim()) {
-              return
-            }
-            this.props.submitFilters(ridInput.value, this.state.start, this.state.end)
+            this.props.submitFilters(this.state.rid, this.state.start, this.state.end)
           }}
         >
           <div className="row">
-            <div className="input-field col s4">
-              <input
-                id="rid_input"
-                type="text"
-                className="validate"
-                ref={node => {
-                  ridInput = node
-                }}
-              />
-              <label
-                htmlFor="rid_input"
-              >
-                RID
-              </label>
-            </div>
-            <div className="input-field col s4">
-              <input
-                type="date"
-                className="datepicker startDate"
+            <div className="col s2 offset-s2">
+              <TextField
+                hintText="Search By RID(s)"
+                onChange={this.handleRIDChange}
               />
             </div>
-            <div className="input-field col s4">
-              <input
-                type="date"
-                className="datepicker endDate"
+            <div className="col s2">
+              <DatePicker
+                autoOk
+                hintText="Start date of filter"
+                onChange={this.handleStart}
               />
             </div>
-            <button
-              className="waves-effect waves-light btn"
-              type="submit"
-              form="filter_inputs"
-              value="submit"
-              onClick={() => this.submit()}
-            >
-              Display
-            </button>
+            <div className="col s2">
+              <DatePicker
+                autoOk
+                hintText="End date of filter"
+                onChange={this.handleEnd}
+              />
+            </div>
+            <div className="col s2">
+              <FlatButton
+                label="Display"
+                type="submit"
+                form="filter_inputs"
+                value="submit"
+                primary
+                onClick={() => this.submit()}
+              />
+            </div>
           </div>
         </form>
       </div>

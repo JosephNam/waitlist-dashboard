@@ -1,8 +1,7 @@
 const express = require("express")
 const router = new express.Router()
 const logger = require("ot-logger")
-const GRANULARITY_LEVEL = require("../helpers/GranularityLevels")
-const granularizeLevel = require("../helpers/DataReadHelpers")
+const datahelper = require("../helpers/DataReadHelpers")
 // const development = process.env.NODE_ENV !== "production"
 
 router.get("/", (req, res) => {
@@ -26,25 +25,33 @@ router.get("/health", (req, res) => {
 */
 router.get("/estimates", (req, res) => {
   const filters = req.query
-  /* TODO: partial filtering */
-  if (Object.keys(filters).length === 0 && filters.constructor === Object) {
-    logger.info("received request to /estimates with no filters")
-    return granularizeLevel("./server/mocks/waitlistService/singleRid.json",
-      "utf8", GRANULARITY_LEVEL.DAY)
-      .then((data) => res.json(data))
+  if (filters.party_sizes) {
+    const partySizes = []
+    for (let i = 0; i < filters.party_sizes.length; i++) {
+      partySizes.push(parseInt(filters.party_sizes[i], 10))
+    }
+    return datahelper
+      .granularizeLevel("./server/mocks/waitlistService/singleRid.json",
+                        "utf8", filters.restaurant_id,
+                        filters.startstamp, filters.endstamp,
+                        filters.level, partySizes)
+      .then(data => {
+        res.json(data)
+      })
   }
-  return granularizeLevel("./server/mocks/waitlistService/singleRid.json", "utf8")
-    .then((json) => (
-      json.filter((datum) => (
-        datum.restaurant_id ===
-          filters.restaurant_id * 1 &&
-          datum.timestamp > filters.startstamp * 1 &&
-          datum.timestamp < filters.endstamp * 1
-      ))
-    ))
+  return datahelper
+    .granularizeLevel("./server/mocks/waitlistService/singleRid.json",
+                      "utf8", filters.restaurant_id,
+                      filters.startstamp, filters.endstamp,
+                      filters.level)
     .then(data => {
       res.json(data)
     })
 })
 
+router.get("/overquoted", (req, res) => (
+  datahelper.getOverQuoted("./server/mocks/waitlistService/singleRid.json",
+    "utf8")
+    .then((num) => res.json(num * 100))
+))
 module.exports = router

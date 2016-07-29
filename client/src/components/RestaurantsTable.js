@@ -1,12 +1,10 @@
 import React, { PropTypes } from "react"
-import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
   from "material-ui/Table"
-import TextField from "material-ui/TextField"
 
 class RestaurantsTable extends React.Component {
   constructor(props) {
     super(props)
-    console.log("Table props", this.props)
     this.metastate = {
       fixedHeader: true,
       fixedFooter: true,
@@ -14,19 +12,19 @@ class RestaurantsTable extends React.Component {
       showRowHover: true,
       selectable: true,
       multiSelectable: true,
-      enableSelectAll: false,
-      deselectOnClickaway: true,
+      enableSelectAll: true,
+      deselectOnClickaway: false,
       showCheckboxes: true,
-      height: '300px',
-      onRowSelection:  (row) => {console.log(row)
-        console.log(this.props.children.data[row].reservation_id + " is selected")
+      height: "300px",
+      onRowSelection: (selectedRows) => {
+        let valid = selectedRows.slice(0)
+        if (valid === "") {
+          valid = []
+        }
+        this.props.submitSelectedRows(valid, this.props.data)
       }
     }
   }
-  // const onRowSelect = (row) => {
-  //   console.log(row)
-  //   console.log(this.props.children.data[row].reservation_id + " is selected")
-  // }
 
   render() {
     return (
@@ -37,7 +35,7 @@ class RestaurantsTable extends React.Component {
           fixedFooter={this.metastate.fixedFooter}
           selectable={this.metastate.selectable}
           multiSelectable={this.metastate.multiSelectable}
-          onRowSelection = {this.metastate.onRowSelection}
+          onRowSelection={this.metastate.onRowSelection}
         >
           <TableHeader
             displaySelectAll={this.metastate.showCheckboxes}
@@ -45,15 +43,16 @@ class RestaurantsTable extends React.Component {
             enableSelectAll={this.metastate.enableSelectAll}
           >
             <TableRow>
-              <TableHeaderColumn colSpan="3" tooltip="Super Header" style={{textAlign: 'center'}}>
+              <TableHeaderColumn colSpan="5" tooltip="Super Header" style={{ textAlign: "center" }}>
                 Waitlist Data
               </TableHeaderColumn>
             </TableRow>
             <TableRow>
               <TableHeaderColumn tooltip="restaurant_id">restaurant_id</TableHeaderColumn>
-              <TableHeaderColumn tooltip="reservation_id">reservation_id</TableHeaderColumn>
+              <TableHeaderColumn tooltip="party_size">party_size</TableHeaderColumn>
               <TableHeaderColumn tooltip="actual">actual</TableHeaderColumn>
-
+              <TableHeaderColumn tooltip="quoted">quoted</TableHeaderColumn>
+              <TableHeaderColumn tooltip="estimated">estimated</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
@@ -62,24 +61,30 @@ class RestaurantsTable extends React.Component {
             showRowHover={this.metastate.showRowHover}
             stripedRows={this.metastate.stripedRows}
           >
-            {this.props.children.data.map( (row, index) => (
-              <TableRow key={index} selected={row.selected}>
-                <TableRowColumn >{row.restaurant_id}</TableRowColumn>
-                <TableRowColumn >{row.reservation_id}</TableRowColumn>
-                <TableRowColumn >{row.actual}</TableRowColumn>
-
-              </TableRow>
-              ))}
+          {this.props.data.map((row, index) => (
+            <TableRow
+              key={index}
+              selected={this.props.selectedRows.indexOf(index) !== -1}
+            >
+              <TableRowColumn >{row.restaurant_id}</TableRowColumn>
+              <TableRowColumn >{row.party_size}</TableRowColumn>
+              <TableRowColumn >{row.actual}</TableRowColumn>
+              <TableRowColumn >{row.quoted}</TableRowColumn>
+              <TableRowColumn >{row.estimated}</TableRowColumn>
+            </TableRow>
+            )
+          )}
           </TableBody>
         </Table>
       </div>
-    );
+    )
   }
 }
 
-
-
 RestaurantsTable.propTypes = {
-  children: PropTypes.object
+  data: PropTypes.array,
+  selectedRows: PropTypes.array,
+  submitSelectedRows: PropTypes.func
 }
+
 export default RestaurantsTable

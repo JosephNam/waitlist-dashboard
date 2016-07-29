@@ -1,31 +1,31 @@
 import React, { PropTypes } from "react"
-import { VictoryAxis, VictoryChart, VictoryLine, VictoryScatter } from "victory"
+import { VictoryAxis, VictoryLine, VictoryScatter } from "victory"
 
 const VictoryLineGraph = (props) => (
-  <VictoryChart
-    height={800}
-    width={600}
-    padding={{
-      top: 75,
-      bottom: 40,
-      left: 40,
-      right: 40
-    }}
+  <svg
+    height={500}
+    width={(props.windowWidth / 12) * 8}
   >
     <VictoryAxis
+      height={500}
+      width={(props.windowWidth / 12) * 8}
       label="x-axis"
     />
     <VictoryAxis
+      height={500}
+      width={(props.windowWidth / 12) * 8}
       dependentAxis
       label="y-axis"
     />
-    <VictoryScatter
-      data={props.data}
-      x={"timestamp"}
-      y={"actual"}
-      size={1}
-    />
     <VictoryLine
+      height={500}
+      width={(props.windowWidth / 12) * 8}
+      style={{
+        data: {
+          stroke: "#822722",
+          strokeWidth: 3
+        }
+      }}
       animate={{
         duration: 500,
         onExit: {
@@ -35,12 +35,50 @@ const VictoryLineGraph = (props) => (
       }}
       data={props.data}
       x={"timestamp"}
-      y={"quoted"}
+      y={"actual"}
     />
-  </VictoryChart>
+    <VictoryScatter
+      height={500}
+      width={(props.windowWidth / 12) * 8}
+      style={{
+        data: {
+          fill: (data) => {
+            if (data.party_size === 1) {
+              return "red"
+            } else if (data.party_size === 2) {
+              return "blue"
+            } else if (data.party_size === 3) {
+              return "green"
+            } else if (data.party_size === 4) {
+              return "grey"
+            } else if (data.party_size === 5) {
+              return "black"
+            } else if (data.party_size === 6) {
+              return "orange"
+            }
+            return "gray"
+          },
+          stroke: "white",
+          strokeWidth: 0.5
+        }
+      }}
+      animate={{
+        duration: 500,
+        onExit: {
+          duration: 1000,
+          before: () => ({ y: -1 })
+        }
+      }}
+      data={props.data}
+      x={"timestamp"}
+      y={"actual"}
+      size={2}
+    />
+  </svg>
 )
 
 VictoryLineGraph.propTypes = {
-  data: PropTypes.array
+  data: PropTypes.array,
+  windowWidth: PropTypes.number
 }
 export default VictoryLineGraph
