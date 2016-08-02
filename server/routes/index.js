@@ -2,6 +2,7 @@ const express = require("express")
 const router = new express.Router()
 const logger = require("ot-logger")
 const datahelper = require("../helpers/DataReadHelpers")
+const request = require("request")
 // const development = process.env.NODE_ENV !== "production"
 
 router.get("/", (req, res) => {
@@ -54,4 +55,24 @@ router.get("/overquoted", (req, res) => (
     "utf8")
     .then((num) => res.json(num * 100))
 ))
+
+router.get("/graphql", (req, res) => (
+  request("http://localhost:8000/graphql?query={pointsBetween(startDate:\"2016-02-20T00:00:00Z\"endDate:\"2016-03-20T12:00:00Z\"){ timestamp restaurant_id party_size quoted actual availability estimated}}",
+  (error, response, body) => {
+    console.log("sending query")
+    if (response.statusCode === 200) {
+      res.send(body)
+    } else {
+      console.log(error)
+      console.log(response.statusCode)
+      res.send(response.statusCode)
+    }
+  })
+))
+
+router.get("/rId/:rId/startstamp/:startstamp/endstamp/:endstamp", (req, res) => {
+  logger.info("received request to /health")
+  res.send(req.params)
+})
+
 module.exports = router

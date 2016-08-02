@@ -24,6 +24,7 @@ function readJSON(file, enc) {
   })
 }
 
+
 function granularizeJSON(file, enc, level, partySizes) {
   return new Promise((fulfill, reject) => {
     readJSON(file, enc).then((json) => {
