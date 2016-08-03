@@ -1,13 +1,17 @@
+/* global window: true*/
 import { Map } from "immutable"
 import {
   REQUEST_DATA, RECEIVE_DATA,
   SET_DATA_FILTER, SET_END_STAMP,
-  SET_START_STAMP, SET_RID, SET_SELECTED_ROWS, SET_SELECTED_POINT,
-  RECEIVE_OVERQUOTED } from "../actions/DashboardActions"
+  SET_START_STAMP, SET_RID,
+  SET_SELECTED_ROWS, SET_SELECTED_POINT,
+  RECEIVE_OVERQUOTED, SET_PARTY_SIZES
+} from "../actions/DashboardActions"
+
 const initialState = new Map({
   dataFilter: {
-    party_sizes: [1, 2, 3, 4, 5, 6]
   },
+  party_sizes: [1, 2, 3, 4, 5, 6],
   isInitialLoad: true,
   isLoadingData: true,
   data: [],
@@ -16,7 +20,10 @@ const initialState = new Map({
   endStamp: 0,
   selectedRows: [],
   overquoted: 0,
-  windowWidth: window.innerWidth
+  windowWidth: window.innerWidth,
+  start: 0,
+  end: 10,
+  selectedStructure: {}
 })
 
 export default function dashboard(state = initialState, action) {
@@ -28,6 +35,9 @@ export default function dashboard(state = initialState, action) {
         return state.set("isInitialLoad", false)
           .set("data", action.data)
           .set("isLoadingData", false)
+          .set("start", action.start)
+          .set("end", action.end)
+          .set("selectedStructure", action.selectedStructure)
       }
       return state.set("data", action.data)
         .set("isLoadingData", false)
@@ -54,6 +64,9 @@ export default function dashboard(state = initialState, action) {
     }
     case RECEIVE_OVERQUOTED:
       return state.set("overquoted", action.overquoted)
+    case SET_PARTY_SIZES: {
+      return state.set("party_sizes", action.partySizes)
+    }
     default:
       return state
   }

@@ -11,12 +11,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => (
   {
-    submitFilters: (rid, start, end) => dispatch(fetchData("/estimates",
+    submitFilters: (rid, start, end, partySizes) => dispatch(fetchData("/estimates",
       {
         restaurant_id: rid,
         startstamp: start,
         endstamp: end
-      }, false
+      }, partySizes, false
     ))
   }
 )

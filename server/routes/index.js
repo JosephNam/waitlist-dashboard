@@ -1,8 +1,10 @@
 const express = require("express")
-const router = new express.Router()
 const logger = require("ot-logger")
 const datahelper = require("../helpers/DataReadHelpers")
 const request = require("request")
+const _ = require("lodash")
+
+const router = new express.Router()
 // const development = process.env.NODE_ENV !== "production"
 
 router.get("/", (req, res) => {
@@ -27,12 +29,9 @@ router.get("/health", (req, res) => {
 router.get("/estimates", (req, res) => {
   const filters = req.query
   if (filters.party_sizes) {
-    const partySizes = []
-    for (let i = 0; i < filters.party_sizes.length; i++) {
-      partySizes.push(parseInt(filters.party_sizes[i], 10))
-    }
+    const partySizes = _.map(filters.party_sizes, (party) => parseInt(party, 10))
     return datahelper
-      .granularizeLevel("./server/mocks/waitlistService/singleRid.json",
+      .processData("./server/mocks/waitlistService/someData.json",
                         "utf8", filters.restaurant_id,
                         filters.startstamp, filters.endstamp,
                         filters.level, partySizes)
@@ -41,7 +40,7 @@ router.get("/estimates", (req, res) => {
       })
   }
   return datahelper
-    .granularizeLevel("./server/mocks/waitlistService/singleRid.json",
+    .processData("./server/mocks/waitlistService/someData.json",
                       "utf8", filters.restaurant_id,
                       filters.startstamp, filters.endstamp,
                       filters.level)
@@ -50,10 +49,11 @@ router.get("/estimates", (req, res) => {
     })
 })
 
-router.get("/overquoted", (req, res) => (
-  datahelper.getOverQuoted("./server/mocks/waitlistService/singleRid.json",
-    "utf8")
+router.get("/overquoted", (req, res) => {
+  logger.info("received request to /overquoted")
+  return datahelper
+    .getOverQuoted("./server/mocks/waitlistService/someData.json", "utf8")
     .then((num) => res.json(num * 100))
-))
+})
 
 module.exports = router

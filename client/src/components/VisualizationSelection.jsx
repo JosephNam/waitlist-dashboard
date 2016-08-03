@@ -17,7 +17,7 @@ export default class VisualizationSelection extends React.Component {
   render() {
     return (
       <div>
-        <DropDownMenu value={VisualizationFilters.BAR_GRAPH} onChange={this.handleChange}>
+        <DropDownMenu value={VisualizationFilters.SCATTER_PLOT} onChange={this.handleChange}>
         {this.props.list.map((item, index) => (
           <MenuItem
             id={`button${index}`}
@@ -38,7 +38,6 @@ VisualizationSelection.propTypes = {
 
 VisualizationSelection.defaultProps = {
   list: [
-    VisualizationFilters.BAR_GRAPH,
     VisualizationFilters.SCATTER_PLOT,
     VisualizationFilters.LINE_GRAPH
   ]

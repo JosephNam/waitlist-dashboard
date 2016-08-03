@@ -1,14 +1,16 @@
 import React, { PropTypes } from "react"
+import CircularProgress from "material-ui/CircularProgress"
+import LinearProgress from "material-ui/LinearProgress"
 // import VisibleVisualization from "../containers/VisualizationContainer"
 import VisualizationSelection from "./VisualizationSelection"
 import FilterContainer from "../containers/FilterContainer"
-import VisibleRestaurantsTable from "../containers/TableContainer"
+// import VisibleRestaurantsTable from "../containers/TableContainer"
 import StatBadges from "./StatBadges"
-import CircularProgress from "material-ui/CircularProgress"
-import LinearProgress from "material-ui/LinearProgress"
 import { VisualizationFilters } from "../actions/VisualizationActions"
-import { getVisible } from "../helpers/VisualizationHelpers"
-import PartySizeControl from "./PartySizeControl"
+// import { getVisible } from "../helpers/VisualizationHelpers"
+import PanelControls from "./PanelControls"
+import RestaurantsTable from "./RestaurantsTable"
+import getVisible from "../helpers/VisualizationHelpers"
 
 const propTypes = {
   load: PropTypes.func,
@@ -19,19 +21,46 @@ const propTypes = {
   data: PropTypes.array,
   visualizationFilter: PropTypes.oneOf([
     VisualizationFilters.BAR_GRAPH,
-    VisualizationFilters.SCATTER_PLOT,
-    VisualizationFilters.LINE_GRAPH
+    VisualizationFilters.LINE_GRAPH,
+    VisualizationFilters.SCATTER_PLOT
   ]),
   isInitialLoad: PropTypes.bool,
   submitSelectedPoint: PropTypes.func,
-  selectedRows: PropTypes.array
+  selectedRows: PropTypes.array,
+  reloadData: PropTypes.func,
+  party_sizes: PropTypes.array,
+  start: PropTypes.number,
+  end: PropTypes.number,
+  selectedStructure: PropTypes.object
 }
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props)
-    this.props.load("/estimates", this.props.dataFilter, true)
+    this.props.load("/estimates", this.props.dataFilter, this.props.party_sizes, true)
     console.log(this.props.dataFilter)
+    this.state = {
+      start: 0,
+      end: -1,
+      selectedRows: this.props.selectedRows,
+      selectedStructure: this.props.selectedStructure
+    }
+    this.setSelectedRows = this.setSelectedRows.bind(this)
+    console.log(this.state)
+  }
+
+  setSelectedRows(row) {
+    // this.state.selectedRows.push(row)
+    // console.log(this.state.selectedRows)
+    const temp = this.state.selectedStructure
+    temp[`${row.timestamp}-${row.party_size}`] = !temp[`${row.timestamp}-${row.party_size}`]
+    console.log(row)
+    this.setState({
+      start: this.state.start,
+      end: this.state.end,
+      selectedRows: this.props.selectedRows,
+      selectedStructure: temp
+    })
   }
 
   render() {
@@ -46,7 +75,10 @@ export default class Dashboard extends React.Component {
           </div>
           <div className="row">
             <div className="col l2 controls">
-              <PartySizeControl />
+              <PanelControls
+                reloadData={this.props.reloadData}
+                dataFilter={this.props.dataFilter}
+              />
             </div>
             <div className="col l8 visualization">
               <div hidden={!this.props.isLoadingData}>
@@ -56,8 +88,11 @@ export default class Dashboard extends React.Component {
                 {getVisible(this.props.visualizationFilter,
                   this.props.data,
                   this.props.windowWidth,
-                  this.props.selectedRows,
-                  this.props.submitSelectedPoint)}
+                  this.props.start,
+                  this.props.end,
+                  this.state.selectedStructure,
+                  this.setSelectedRows
+                )}
               </div>
             </div>
             <div className="col l2 controls">
@@ -74,7 +109,12 @@ export default class Dashboard extends React.Component {
                 <LinearProgress />
               </div>
               <div hidden={this.props.isLoadingData}>
-                <VisibleRestaurantsTable />
+                <RestaurantsTable
+                  data={this.props.data}
+                  selectedStructure={this.state.selectedStructure}
+                  setSelectedRows={this.setSelectedRows}
+                  windowWidth={this.props.windowWidth}
+                />
               </div>
             </div>
           </div>

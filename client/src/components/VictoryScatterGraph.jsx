@@ -1,5 +1,6 @@
 import React, { PropTypes } from "react"
 import { VictoryAxis, VictoryScatter } from "victory"
+import { COLORS } from "../helpers/ColorHelpers"
 
 const VictoryScatterGraph = (props) => (
   <svg
@@ -25,20 +26,16 @@ const VictoryScatterGraph = (props) => (
       y={"actual"}
       size={3}
       symbol={(data) => {
-        if (data.selected) {
+        if (props.selectedStructure[`${data.timestamp}-${data.party_size}`]) {
           return "triangleUp"
         }
         return "circle"
       }}
       style={{
         data: {
-          fill: "gold",
-          stroke: "orange",
-          strokeWidth: 3
-        },
-        labels: {
-          fill: "none",
-          padding: 12
+          fill: (data) => (
+            COLORS[data.party_size]
+          )
         }
       }}
       events={[{
@@ -47,11 +44,11 @@ const VictoryScatterGraph = (props) => (
           onClick: () => (
             [{
               mutation: (elementProps) => {
-                props.submitSelectedPoint(elementProps.datum, props.selectedRows, props.data)
+                props.setSelectedRows(elementProps.datum)
                 return {
                   style:
                     Object.assign({}, elementProps.style, {
-                      stroke: "orange", fill: "gold"
+                      fill: "yellow"
                     })
                 }
               }
@@ -65,8 +62,12 @@ const VictoryScatterGraph = (props) => (
 
 VictoryScatterGraph.propTypes = {
   data: PropTypes.array,
-  selectedRows: PropTypes.array,
-  submitSelectedPoint: PropTypes.func,
-  windowWidth: PropTypes.number
+  windowWidth: PropTypes.number,
+  start: PropTypes.number,
+  end: PropTypes.number,
+  selectedStructure: PropTypes.object,
+  setSelectedRows: PropTypes.func
 }
+
+
 export default VictoryScatterGraph

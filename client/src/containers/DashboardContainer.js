@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { fetchData, setSelectedPoint } from "../actions/DashboardActions"
+import { fetchData, reload, setSelectedPoint } from "../actions/DashboardActions"
 
 import Dashboard from "../components/Dashboard"
 
@@ -11,15 +11,20 @@ const mapStateToProps = (state) => ({
   windowWidth: state.dashboard.get("windowWidth"),
   visualizationFilter: state.visualization.get("visualizationFilter"),
   isInitialLoad: state.dashboard.get("isInitialLoad"),
-  selectedRows: state.dashboard.get("selectedRows")
+  selectedRows: state.dashboard.get("selectedRows"),
+  party_sizes: state.dashboard.get("party_sizes"),
+  selectedStructure: state.dashboard.get("selectedStructure")
 })
 
 const mapDispatchToProps = (dispatch) => (
   {
-    load: (url, filters, isInitial) => { dispatch(fetchData(url, filters, isInitial)) },
+    load: (url, partySizes, filters, isInitial) => {
+      dispatch(fetchData(url, partySizes, filters, isInitial))
+    },
     submitSelectedPoint: (selectedPoint, selectedRaw, data) => {
       dispatch(setSelectedPoint(selectedPoint, selectedRaw, data))
-    }
+    },
+    reloadData: (partySizes, filter) => { dispatch(reload(partySizes, filter)) }
   }
 )
 

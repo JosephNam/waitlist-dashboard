@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react"
-import { VictoryAxis, VictoryBar } from "victory"
+import { VictoryAxis, VictoryBar, VictoryLine, VictoryScatter } from "victory"
 
 const VictoryBarGraph = (props) => (
   <svg
@@ -9,8 +9,8 @@ const VictoryBarGraph = (props) => (
     <VictoryAxis
       height={500}
       width={(props.windowWidth / 12) * 8}
+      label="x-axis"
       standalone={false}
-      label="Time"
     />
     <VictoryAxis
       height={500}
@@ -18,8 +18,12 @@ const VictoryBarGraph = (props) => (
       dependentAxis
       standalone={false}
       label="y-axis"
+      standalone={false}
     />
-    <VictoryBar
+    <VictoryScatter
+      standalone={false}
+      height={500}
+      width={(props.windowWidth / 12) * 8}
       style={{
         data: {
           fill: (data) => {
@@ -38,22 +42,14 @@ const VictoryBarGraph = (props) => (
             }
             return "gray"
           },
-          width: 5
-        }
-      }}
-      height={500}
-      width={(props.windowWidth / 12) * 8}
-      standalone={false}
-      animate={{
-        duration: 500,
-        onExit: {
-          duration: 1000,
-          before: () => ({ y: -1 })
+          stroke: "white",
+          strokeWidth: 0.5
         }
       }}
       data={props.data}
       x={"timestamp"}
       y={"actual"}
+      size={4}
     />
   </svg>
 )

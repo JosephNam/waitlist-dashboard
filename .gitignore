@@ -7,3 +7,4 @@ bundle.js
 reports/*
 .DS_Store
 client/output/*
+server/mocks/*

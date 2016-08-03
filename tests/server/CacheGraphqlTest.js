@@ -10,6 +10,12 @@ function fetchDatafromCache() {
   const result = cache.get(moment("2016-04-01T00:00:00Z").utc(), moment("2016-04-02T23:59:59Z").utc(), 5580)
 }
 
+function fetchDatafromCache() {
+  // example for fetch data
+  const start = process.hrtime()
+  const result = cache.get(moment("2016-04-01T00:00:00Z").utc(), moment("2016-04-12T23:59:59Z").utc(), 5580)
+}
+
 // testGraphqlinSmallerTimeRange
 function graphqlSevenDaysQuery(start) {
   const startDate = moment(start).utc().startOf("day")

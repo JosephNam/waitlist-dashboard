@@ -9,7 +9,8 @@ const propTypes = {
   submitFilters: PropTypes.func,
   load: PropTypes.func,
   handleStart: PropTypes.func,
-  handleEnd: PropTypes.func
+  handleEnd: PropTypes.func,
+  party_sizes: PropTypes.array
 }
 
 export default class FilterInput extends React.Component {
@@ -54,7 +55,10 @@ export default class FilterInput extends React.Component {
           className="col s12"
           onSubmit={e => {
             e.preventDefault()
-            this.props.submitFilters(this.state.rid, this.state.start, this.state.end)
+            this.props.submitFilters(this.state.rid,
+              this.state.start,
+              this.state.end,
+              this.props.party_sizes)
           }}
         >
           <div className="row">

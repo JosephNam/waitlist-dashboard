@@ -1,4 +1,5 @@
 import request from "superagent-es6-promise"
+import _ from "lodash"
 
 export const FETCH_DATA = "FETCH_DATA"
 export const REQUEST_DATA = "REQUEST_DATA"
@@ -13,6 +14,7 @@ export const SET_END_STAMP = "SET_END_STAMP"
 export const SET_SELECTED_ROWS = "SET_SELECTED_ROWS"
 export const SET_SELECTED_POINT = "SET_SELECTED_POINT"
 
+export const SET_PARTY_SIZES = "SET_PARTY_SIZES"
 
 export const REQUEST_OVERQUOTED = "REQUEST_OVERQUOTED"
 export const RECEIVE_OVERQUOTED = "RECEIVE_OVERQUOTED"
@@ -50,31 +52,64 @@ export function requestData(isInitialLoad) {
 }
 
 export function receiveData(data, filter, isInitialLoad) {
+  const selectedStructure = {}
+  _.forEach(data, (datum) => {
+    // selectedStructure[`${datum.reservation_id}`] = datum.selected
+    selectedStructure[`${datum.timestamp}-${datum.party_size}`] = datum.selected
+  })
   return {
     type: RECEIVE_DATA,
     data,
     dataFilter: filter,
-    isInitialLoad
+    isInitialLoad,
+    selectedStructure,
+    start: data[0].timestamp,
+    end: data[data.length - 1].timestamp
   }
 }
 
-export function fetchData(url, filter, isInitialLoad) {
+export function fetchData(url,
+  filter,
+  partySizes,
+  isInitialLoad) {
   return (dispatch) => {
     // set state to requesting data
     dispatch(requestData(isInitialLoad))
     // send http request that resolves and receives data
+    const dataFilters = _.cloneDeep(filter)
+    dataFilters.party_sizes = partySizes
     return request
       .get(url)
-      .query(filter)
+      .query(dataFilters)
       .set("application/json")
       .then((res) => {
         setTimeout(() => {
-          dispatch(receiveData(res.body, filter, isInitialLoad))
+          const data = []
+          _.each(res.body, (size) => {
+            _.each(size, (datum) => {
+              data.push(datum)
+            })
+          })
+          dispatch(receiveData(data, filter, isInitialLoad))
           dispatch(fetchOverquoted())
         }
         , 1500)
       })
       .catch((err) => console.log(err))
+  }
+}
+
+export function setPartySizes(partySizes) {
+  return {
+    type: SET_PARTY_SIZES,
+    partySizes
+  }
+}
+
+export function reload(partySizes, filter) {
+  return (dispatch) => {
+    dispatch(setPartySizes(partySizes))
+    dispatch(fetchData("/estimates", filter, partySizes, false))
   }
 }
 
@@ -116,6 +151,11 @@ export function setSelectedRows(selectedRows, oldData) {
       data[i].selected = false
     }
   }
+  /*
+  const data = _.map(oldData, (datum, i) => (
+    datum.selected !== -1
+  ))
+ */
 
   return {
     type: SET_SELECTED_ROWS,
