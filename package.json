@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./server/bin/www",
-    "start:watch": "nodemon ./server/bin/www",
+    "start": "node --max_old_space_size=4096 ./server/bin/www",
+    "start:watch": "nodemon --max_old_space_size=4096 --prof ./server/bin/www",
     "build": "pipeline/build_app",
     "build:docker": "pipeline/build_docker",
     "build:watch": "webpack --progress --colors --watch",

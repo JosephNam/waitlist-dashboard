@@ -50,8 +50,6 @@ export default class Dashboard extends React.Component {
   }
 
   setSelectedRows(row) {
-    // this.state.selectedRows.push(row)
-    // console.log(this.state.selectedRows)
     const temp = this.state.selectedStructure
     temp[`${row.timestamp}-${row.party_size}`] = !temp[`${row.timestamp}-${row.party_size}`]
     console.log(row)

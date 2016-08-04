@@ -15,13 +15,6 @@ const VictoryLineGraph = (props) => (
       width={((props.windowWidth / 12) * 8) - 15}
       label="x-axis (Month - Day - Hour)"
       standalone={false}
-      tickValues={props.data.map((datum) => datum.timestamp)}
-      domainPadding={{ x: 15, y: 15 }}
-      tickFormat={props.data.map((datum) => {
-        const tick = new Date(datum.timestamp)
-        return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
-      })}
-      scale="time"
       orientation="bottom"
     />
     <VictoryAxis
@@ -42,8 +35,9 @@ const VictoryLineGraph = (props) => (
           stroke: COLORS.ESTIMATED
         }
       }}
+      interpolation={"basis"}
       x={"timestamp"}
-      y={"estimated"}
+      y={"availability"}
     />
     <VictoryLine
       height={500}
@@ -56,6 +50,7 @@ const VictoryLineGraph = (props) => (
           stroke: COLORS.QUOTED
         }
       }}
+      interpolation={"basis"}
       x={"timestamp"}
       y={"quoted"}
       size={2}
@@ -71,6 +66,7 @@ const VictoryLineGraph = (props) => (
           stroke: COLORS.ACTUAL
         }
       }}
+      interpolation={"basis"}
       x={"timestamp"}
       y={"actual"}
     />

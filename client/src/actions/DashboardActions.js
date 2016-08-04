@@ -86,12 +86,15 @@ export function fetchData(url,
         setTimeout(() => {
           const data = []
           _.each(res.body, (size) => {
-            _.each(size, (datum) => {
-              data.push(datum)
+            _.each(size, (set) => {
+              _.each(set, (datum) => {
+                data.push(datum)
+              })
             })
           })
+          console.log(data)
           dispatch(receiveData(data, filter, isInitialLoad))
-          dispatch(fetchOverquoted())
+          // dispatch(fetchOverquoted())
         }
         , 1500)
       })

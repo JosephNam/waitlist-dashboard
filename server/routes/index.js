@@ -1,7 +1,6 @@
 const express = require("express")
 const logger = require("ot-logger")
 const datahelper = require("../helpers/DataReadHelpers")
-const request = require("request")
 const _ = require("lodash")
 
 const router = new express.Router()
@@ -31,21 +30,25 @@ router.get("/estimates", (req, res) => {
   if (filters.party_sizes) {
     const partySizes = _.map(filters.party_sizes, (party) => parseInt(party, 10))
     return datahelper
-      .processData("./server/mocks/waitlistService/someData.json",
-                        "utf8", filters.restaurant_id,
-                        filters.startstamp, filters.endstamp,
-                        filters.level, partySizes)
-      .then(data => {
+      .processDateRange("./server/mocks/waitlistService/",
+          filters.restaurantID, filters.startstamp, filters.endstamp, filters.level, partySizes)
+      .then((data) => {
+        console.log("sending data to client")
         res.json(data)
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
   return datahelper
-    .processData("./server/mocks/waitlistService/someData.json",
-                      "utf8", filters.restaurant_id,
-                      filters.startstamp, filters.endstamp,
-                      filters.level)
-    .then(data => {
+    .processDateRange("./server/mocks/waitlistService/",
+        filters.restaurantID, filters.startstamp, filters.endstamp, filters.level)
+    .then((data) => {
+      console.log("sending data to client", data)
       res.json(data)
+    })
+    .catch((err) => {
+      console.log(err)
     })
 })
 

@@ -3,109 +3,100 @@ const isSameTimeFrame = require("./TimeHelpers")
 const fs = require("fs")
 const _ = require("lodash")
 
-function readFile(file, enc) {
+function getAllFilesFromFolder(dir) {
+  return new Promise((fulfill, reject) => {
+    fs.readdir(dir, (err, files) => {
+      if (err) reject(err)
+      else fulfill(files)
+    })
+  })
+}
+
+function readFile(file, enc, partySizes, startstamp, endstamp) {
   return new Promise((fulfill, reject) => {
     fs.readFile(file, enc, (err, res) => {
-      if (err) reject(err)
-      else fulfill(res)
+      if (err) {
+        console.log(err)
+        reject(err)
+      } else {
+        const json = JSON.parse(res)
+        const valid = _(json)
+          .filter((datum) => _(partySizes).includes(datum.party_size))
+          .filter((datum) => (datum.timestamp >= startstamp && datum.timestamp < endstamp))
+          .value()
+        fulfill(valid)
+      }
     })
   })
 }
 
-function readJSON(file, enc) {
+function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
   return new Promise((fulfill, reject) => {
-    readFile(file, enc).then((res) => {
-      try {
-        fulfill(JSON.parse(res).data.pointsBetween)
-      } catch (ex) {
-        reject(ex)
-      }
-    }, reject)
-  })
-}
+    try {
+      readFile(file, enc, partySizes, startstamp, endstamp).then((json) => {
+        const bySize = {}
+        const byTimeFrame = {}
+        const averages = {}
 
-function granularizeJSON(file, enc, level, partySizes) {
-  return new Promise((fulfill, reject) => {
-    readJSON(file, enc).then((json) => {
-      try {
-        const sorted = json.sort((a, b) => (parseInt(a.timestamp, 10) - parseInt(b.timestamp, 10)))
-        const parties = _.filter(sorted, (datum) => (
-          _.includes(partySizes, datum.party_size)
-        ))
-        const averages = []
-        /* for all days in range find average */
-        const sums = [{
-          quoted: parties[0].quoted,
-          actual: parties[0].actual,
-          estimated: parties[0].estimated,
-          totalInDay: 1
-        }]
-        for (let i = 0; i < partySizes.length; i++) {
-          let dayCounter = 0
-          for (let j = 1; j < parties.length; j++) {
-            if (isSameTimeFrame(parties[j].timestamp, parties[j - 1].timestamp, level)
-              ) {
-              sums[dayCounter].quoted += parties[j].quoted
-              sums[dayCounter].actual += parties[j].actual
-              sums[dayCounter].estimated += parties[j].estimated
-              sums[dayCounter].totalInDay++
-            } else {
-              const days = sums[dayCounter].totalInDay
-              averages.push({
-                timestamp: parties[j - 1].timestamp,
-                quoted: sums[dayCounter].quoted / days,
-                actual: sums[dayCounter].actual / days,
-                estimated: sums[dayCounter].estimated / days,
-                party_size: partySizes[i],
-                selected: false
-              })
-              sums.push({
-                quoted: parties[j].quoted,
-                actual: parties[j].actual,
-                estimated: parties[j].estimated,
-                totalInDay: 1
-              })
-              dayCounter++
-            }
+        _([1, 2, 3, 4, 5, 6]).forEach((val) => {
+          bySize[`${val}`] = _(json).filter({ party_size: val }).take(1).value()
+          byTimeFrame[`${val}`] = [{
+            timestamp: bySize[`${val}`][0].timestamp,
+            quoted: 0,
+            actual: 0,
+            availability: 0,
+            totalInTimeFrame: 0,
+            party_size: val
+          }]
+          averages[`${val}`] = []
+        })
+
+        _(json).forEach((party) => {
+          const size = party.party_size
+          const index = byTimeFrame[`${size}`].length - 1
+          if (isSameTimeFrame(party.timestamp, byTimeFrame[`${size}`][index].timestamp, level)) {
+            byTimeFrame[`${size}`][index].quoted += party.quoted
+            byTimeFrame[`${size}`][index].actual += party.actual
+            byTimeFrame[`${size}`][index].availability += party.availability
+            byTimeFrame[`${size}`][index].totalInTimeFrame++
+          } else {
+            const item = byTimeFrame[`${size}`][index]
+            averages[`${size}`].push({
+              quoted: item.quoted / item.totalInTimeFrame,
+              actual: item.actual / item.totalInTimeFrame,
+              availability: item.availability / item.totalInTimeFrame,
+              totalInTimeFrame: item.totalInTimeFrame,
+              timestamp: item.timestamp,
+              party_size: item.party_size
+            })
+            byTimeFrame[`${size}`].push({
+              timestamp: party.timestamp,
+              quoted: 0,
+              actual: 0,
+              availability: 0,
+              totalInTimeFrame: 0,
+              party_size: size
+            })
           }
-        }
+        })
         fulfill(averages)
-      } catch (ex) {
-        reject(ex)
-      }
-    })
+      })
+    } catch (ex) {
+      reject(ex)
+    }
   })
 }
 
 const today = new Date().getTime()
 
-function granularizeLevel(file, enc, restaurantID = null, startstamp = 0,
-                          endstamp = today, level = GRANULARITY_LEVEL.HOUR,
-                          partySizeList = [1, 2, 3, 4, 5, 6]) {
-  if (restaurantID === 0 || restaurantID == null || restaurantID === "0") {
-    return new Promise((fulfill, reject) => {
-      try {
-        granularizeJSON(file, enc, level, partySizeList)
-          .then((json) => {
-            fulfill(_.filter(json, (datum) => (
-              datum.timestamp >= startstamp * 1
-                && datum.timestamp <= endstamp * 1
-            )))
-          })
-      } catch (ex) {
-        reject(ex)
-      }
-    })
-  }
+function processData(file, enc, restaurantID = null,
+  startstamp = 0, endstamp = today,
+  level = GRANULARITY_LEVEL.HOUR, partySizeList = [1, 2, 3, 4, 5, 6]) {
   return new Promise((fulfill, reject) => {
     try {
-      granularizeJSON(file, enc, level, partySizeList)
+      granularizeJSON(file, enc, level, partySizeList, startstamp, endstamp)
         .then((json) => {
-          fulfill(_.filter(json, (datum) => (
-              datum.restaurant_id === restaurantID
-              && datum.timestamp >= startstamp * 1
-              && datum.timestamp <= endstamp * 1
-          )))
+          fulfill(json)
         })
     } catch (ex) {
       reject(ex)
@@ -113,37 +104,58 @@ function granularizeLevel(file, enc, restaurantID = null, startstamp = 0,
   })
 }
 
-function processData(file, enc, restaurantID = null,
-  startstamp = 0, endstamp = today,
-  level, partySizeList = [1, 2, 3, 4, 5, 6]) {
+function processDateRange(dir, restaurantID = -1,
+  startstamp = 1462233600000, endstamp = today,
+  level = GRANULARITY_LEVEL.HOUR, partySizeList = [1, 2, 3, 4, 5, 6]) {
+  console.log(dir, restaurantID, startstamp, endstamp, GRANULARITY_LEVEL.DAY, partySizeList)
   return new Promise((fulfill, reject) => {
-    try {
-      granularizeLevel(file, enc,
-        restaurantID, startstamp,
-        endstamp, GRANULARITY_LEVEL.HOUR, partySizeList)
-        .then((json) => {
-          const newData = {
-            party_size_1: [],
-            party_size_2: [],
-            party_size_3: [],
-            party_size_4: [],
-            party_size_5: [],
-            party_size_6: []
+    getAllFilesFromFolder(dir)
+      .then((files) => {
+        console.log(files)
+        const promises = []
+        _.forEach(files, (file) => {
+          if (file.substring(file.length - 5, file.length) === ".json") {
+            const date = new Date(parseInt(file.substring(0, file.length - 5), 10)).valueOf()
+            if (date >= startstamp && date < endstamp) {
+              console.log("hello")
+              promises.push(processData(`${dir}${file}`, "utf8",
+                restaurantID, startstamp,
+                endstamp, GRANULARITY_LEVEL.DAY, partySizeList))
+            }
           }
-          _.forEach(json, (val) => {
-            newData[`party_size_${val.party_size}`].push(val)
-          })
-          fulfill(newData)
         })
-    } catch (ex) {
-      reject(ex)
-    }
+        console.log(promises)
+        Promise.all(promises)
+          .then((values) => {
+            const data = {
+              1: [],
+              2: [],
+              3: [],
+              4: [],
+              5: [],
+              6: []
+            }
+
+            _.forEach(values, (val, i) => {
+              _.forEach(val, (datum, key) => {
+                data[key].push(datum)
+              })
+              _.flatten(data[i])
+            })
+
+            console.log(data[1].length)
+            fulfill(data)
+          }).catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
   })
 }
 
 function getOverQuoted(file, enc) {
   return new Promise((fulfill, reject) => {
-    readJSON(file, enc)
+    readFile(file, enc)
       .then((data) => {
         try {
           let count = 0
@@ -159,6 +171,6 @@ function getOverQuoted(file, enc) {
 }
 
 module.exports = {
-  processData,
+  processDateRange,
   getOverQuoted
 }
