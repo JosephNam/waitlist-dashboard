@@ -37,7 +37,7 @@ const VictoryLineGraph = (props) => (
           stroke: COLORS.ESTIMATED
         }
       }}
-      interpolation={"basis"}
+      interpolation={"cardinal"}
       x={"timestamp"}
       y={"availability"}
     />
@@ -52,7 +52,7 @@ const VictoryLineGraph = (props) => (
           stroke: COLORS.QUOTED
         }
       }}
-      interpolation={"basis"}
+      interpolation={"cardinal"}
       x={"timestamp"}
       y={"quoted"}
       size={2}
@@ -68,7 +68,7 @@ const VictoryLineGraph = (props) => (
           stroke: COLORS.ACTUAL
         }
       }}
-      interpolation={"basis"}
+      interpolation={"cardinal"}
       x={"timestamp"}
       y={"actual"}
     />
