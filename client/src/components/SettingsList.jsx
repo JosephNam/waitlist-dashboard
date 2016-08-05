@@ -1,60 +1,36 @@
-import React from "react"
+import React, { PropTypes } from "react"
 import { List, ListItem } from "material-ui/List"
 import Subheader from "material-ui/Subheader"
 import Divider from "material-ui/Divider"
 import Checkbox from "material-ui/Checkbox"
 import Toggle from "material-ui/Toggle"
-import MobileTearSheet from "./MobileTearSheet"
+import Paper from 'material-ui/Paper';
+import PartySizeControl from "./PartySizeControl"
+
 const styles = {
   root: {
     display: "flex",
-    flexWrap: "wrap",
-  },
+    flexWrap: "wrap"
+  }
 }
-
-const FilterSettings = () => (
+const propTypes = {
+  reloadData: PropTypes.func,
+  dataFilter: PropTypes.object
+}
+const FilterSettings = (props) => (
   <div style={styles.root}>
-  <MobileTearSheet>
-    <List>
-      <Subheader>Filter</Subheader>
-      <ListItem
-        primaryText="Profile photo"
-        secondaryText="Change your Google+ profile photo"
-      />
-      <ListItem
-        primaryText="Show your status"
-        secondaryText="Your status is visible to everyone you use with"
-      />
-    </List>
-    <Divider />
-    <List>
-      <Subheader>Hangout Notifications</Subheader>
-      <ListItem
-        leftCheckbox={<Checkbox />}
-        primaryText="Notifications"
-        secondaryText="Allow notifications"
-      />
-      <ListItem
-        leftCheckbox={<Checkbox />}
-        primaryText="Sounds"
-        secondaryText="Hangouts message"
-      />
-      <ListItem
-        leftCheckbox={<Checkbox />}
-        primaryText="Video sounds"
-        secondaryText="Hangouts video call"
-      />
-    </List>
-    <Divider />
-    <List>
-      <Subheader>Priority Interruptions</Subheader>
-      <ListItem primaryText="Events and reminders" rightToggle={<Toggle />} />
-      <ListItem primaryText="Calls" rightToggle={<Toggle />} />
-      <ListItem primaryText="Messages" rightToggle={<Toggle />} />
-    </List>
-  </MobileTearSheet>
-
-
+    <Paper zDepth={1} className="col l12 m12 s12">
+      <List>
+        <Subheader>Party Size</Subheader>
+          <PartySizeControl reloadData={props.reloadData} dataFilter={props.dataFilter} />
+      </List>
+      <Divider />
+      <List>
+        <Subheader>Origin</Subheader>
+        <ListItem primaryText="Online" rightToggle={<Toggle />} />
+        <ListItem primaryText="Walk-in" rightToggle={<Toggle />} />
+      </List>
+    </Paper>
   </div>
 )
 

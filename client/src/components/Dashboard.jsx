@@ -2,7 +2,7 @@ import React, { PropTypes } from "react"
 import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
 // import VisibleVisualization from "../containers/VisualizationContainer"
-import VisualizationSelection from "./VisualizationSelection"
+import VisualizationSelection from "./Tabs"
 import FilterContainer from "../containers/FilterContainer"
 // import VisibleRestaurantsTable from "../containers/TableContainer"
 import StatBadges from "./StatBadges"
@@ -11,6 +11,9 @@ import { VisualizationFilters } from "../actions/VisualizationActions"
 import PanelControls from "./PanelControls"
 import RestaurantsTable from "./RestaurantsTable"
 import getVisible from "../helpers/VisualizationHelpers"
+import FilterSettings from "./SettingsList"
+import Paper from "material-ui/Paper"
+
 
 const propTypes = {
   load: PropTypes.func,
@@ -74,57 +77,68 @@ export default class Dashboard extends React.Component {
     return (
       <div>
         <div className="centered" hidden={!this.props.isInitialLoad}>
-          <CircularProgress size={2} />
+          <CircularProgress size={2} color={"red"} />
         </div>
         <div hidden={this.props.isInitialLoad}>
-          <div className="row badges">
+          <div className="badges" align="center">
             <StatBadges overquoted={this.props.overquoted} />
           </div>
           <div className="row">
-            <div className="col l2 controls">
-              <PanelControls
+            <div className="col l2 m6 s11 offset-s1 controls">
+              <FilterSettings
                 reloadData={this.props.reloadData}
                 dataFilter={this.filter}
               />
             </div>
-            <div className="col l8 visualization">
+            <div className="col l9 m11 s11 offset-s1">
               <div hidden={!this.props.isLoadingData}>
-                <LinearProgress />
+                <LinearProgress color={"red"} />
               </div>
               <div hidden={this.props.isLoadingData}>
-                {getVisible(this.props.visualizationFilter,
-                  this.props.data,
-                  this.props.windowWidth,
-                  this.props.start,
-                  this.props.end,
-                  this.state.selectedStructure,
-                  this.setSelectedRows
-                )}
-              </div>
-            </div>
-            <div className="col l2 controls">
-              Graph Type
-              <VisualizationSelection />
-            </div>
-          </div>
-          <div className="row">
-            <FilterContainer />
-          </div>
-          <div className="row">
-            <div className="col l8 offset-l2">
-              <div hidden={!this.props.isLoadingData}>
-                <LinearProgress />
-              </div>
-              <div hidden={this.props.isLoadingData}>
-                <RestaurantsTable
-                  data={this.props.data}
-                  selectedStructure={this.state.selectedStructure}
-                  setSelectedRows={this.setSelectedRows}
-                  windowWidth={this.props.windowWidth}
-                />
+                <div className="row">
+                  <FilterContainer />
+                  <VisualizationSelection />
+                    {getVisible(this.props.visualizationFilter,
+                      this.props.data,
+                      this.props.windowWidth,
+                      this.props.start,
+                      this.props.end,
+                      this.state.selectedStructure,
+                      this.setSelectedRows
+                    )}
+                  <Paper zDepth={1}>
+                    <RestaurantsTable
+                      data={this.props.data}
+                      selectedStructure={this.state.selectedStructure}
+                      setSelectedRows={this.setSelectedRows}
+                      windowWidth={this.props.windowWidth}
+                    />
+                  </Paper>
+                </div>
               </div>
             </div>
           </div>
+          <footer className="page-footer blue-grey darken-4" hidden={this.props.isLoadingData}>
+            <div className="footer_container" >
+              <div className="row">
+                <div className="col l6 s12">
+                  <h5 className="white-text">Location</h5>
+                  <p className="grey-text text-lighten-4">701 Cherry St, Chattanooga, TN 37402</p>
+                </div>
+                <div className="col l4 offset-l2 s12">
+                  <h5 className="white-text">Codes</h5>
+                  <ul>
+                    <li><a className="grey-text text-lighten-3" href="https://github.com/opentable/waitlist-dashboard.git">Github</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="footer-copyright" >
+              <div className="container">
+              Copyright © 2016 OpenTable, Inc. - All rights reserved.
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
     )

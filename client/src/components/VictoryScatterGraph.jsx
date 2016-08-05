@@ -12,7 +12,6 @@ const VictoryScatterGraph = (props) => (
       width={(props.windowWidth / 12) * 8}
       domainPadding={{ x: 15, y: 15 }}
       tickFormat={(x) => {
-        console.log(x)
         const tick = new Date(x)
         return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
       }}

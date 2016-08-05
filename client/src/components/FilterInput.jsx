@@ -52,7 +52,7 @@ export default class FilterInput extends React.Component {
       <div className="row">
         <form
           id="filter_inputs"
-          className="col s12"
+          className="col l12"
           onSubmit={e => {
             e.preventDefault()
             this.props.submitFilters(this.state.rid,
@@ -62,33 +62,39 @@ export default class FilterInput extends React.Component {
           }}
         >
           <div className="row">
-            <div className="col s2 offset-s2">
-              <TextField
-                hintText="Search By RID(s)"
-                onChange={this.handleRIDChange}
-              />
-            </div>
-            <div className="col s2">
+            {// <div className="col s3">
+            //   <TextField
+            //     hintText="Search By RID(s)"
+            //     onChange={this.handleRIDChange}
+            //     underlineFocusStyle={{ color:"red" }}
+            //     underlineShow={false}
+            //   />
+            // </div>
+          }
+            <div className="col s3">
               <DatePicker
                 autoOk
                 hintText="Start date of filter"
+                dialogContainerStyle={{ color: "red" }}
                 onChange={this.handleStart}
               />
             </div>
-            <div className="col s2">
+            <div className="col s3">
               <DatePicker
                 autoOk
                 hintText="End date of filter"
                 onChange={this.handleEnd}
               />
             </div>
-            <div className="col s2">
+            <div className="col s3">
               <FlatButton
                 label="Display"
                 type="submit"
                 form="filter_inputs"
                 value="submit"
-                primary
+                style={{ color: "white" }}
+                backgroundColor= "#DA3743"
+                hoverColor="red"
                 onClick={() => this.submit()}
               />
             </div>

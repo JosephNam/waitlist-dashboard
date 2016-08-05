@@ -2,6 +2,9 @@ import React, { PropTypes } from "react"
 import Checkbox from "material-ui/Checkbox"
 import { COLORS } from "../helpers/ColorHelpers"
 import _ from "lodash"
+import { ListItem } from "material-ui/List"
+import ToggleCheckBox from "material-ui/svg-icons/toggle/check-box"
+import ToggleCheckBoxOutlineBlank from "material-ui/svg-icons/toggle/check-box-outline-blank"
 
 export default class PartySizeControl extends React.Component {
   constructor(props) {
@@ -36,21 +39,17 @@ export default class PartySizeControl extends React.Component {
     }
     return (
       <div style={styles.block}>
-        <p> Party size </p>
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} style={{ backgroundColor: COLORS[i] }}>
-            <Checkbox
-              key={i}
-              id={i}
+          <ListItem
+            leftCheckbox={<Checkbox
+              checkedIcon={<ToggleCheckBox />}
+              uncheckedIcon={<ToggleCheckBoxOutlineBlank />}
               checked={_.includes(this.state.checked, i)}
-              label={i}
-              inputStyle={{ backgroundColor: "white" }}
-              iconStyle={{ backgroundColor: "white" }}
-              labelStyle={{ color: "white" }}
-              style={styles.checkbox}
+              iconStyle={{ fill: COLORS[i] }}
               onCheck={this.handleToggle}
-            />
-          </div>
+            />}
+            primaryText={i}
+          />
         ))}
       </div>
     )

@@ -12,8 +12,6 @@ const getVisible = (filter,
         <VictoryScatterGraph
           data={data}
           windowWidth={windowWidth}
-          start={start}
-          end={end}
           selectedStructure={selectedStructure}
           setSelectedRows={setSelectedRows}
         />

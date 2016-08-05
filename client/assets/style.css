@@ -12,7 +12,7 @@ html {
 }
 
 .visualization {
-  background-color: #eeeeee;
+  /*background-color: #eeeeee;*/
 }
 
 .controls {
@@ -20,7 +20,11 @@ html {
 }
 
 .badges {
-  height: 100px;
+  position: relative;
+  padding-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+
 }
 
 .dimmed {
@@ -39,3 +43,11 @@ html {
   background: rgba(0, 0, 0, 0.5);
 }
 
+.title{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 200%;
+}
+
+.chart_tabs{
+  padding-bottom: 15px;
+}

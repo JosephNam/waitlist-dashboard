@@ -27,7 +27,6 @@ const VictoryLineGraph = (props) => (
       width={((props.windowWidth / 12) * 8) - 15}
       dependentAxis
       label="y-axis"
-      standalone={false}
     />
     <VictoryLine
       height={500}
