@@ -1,16 +1,22 @@
 import React, { PropTypes } from "react"
-import { VictoryAxis, VictoryScatter } from "victory"
+import { VictoryAxis, VictoryChart, VictoryScatter } from "victory"
 import { COLORS } from "../helpers/ColorHelpers"
 
 const VictoryScatterGraph = (props) => (
-  <svg
+  <VictoryChart
     height={500}
     width={(props.windowWidth / 12) * 8}
   >
     <VictoryAxis
       height={500}
       width={(props.windowWidth / 12) * 8}
-      label="x-axis"
+      domainPadding={{ x: 15, y: 15 }}
+      tickFormat={(x) => {
+        console.log(x)
+        const tick = new Date(x)
+        return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
+      }}
+      label="x-axis (Month - Day - Hour)"
     />
     <VictoryAxis
       height={500}
@@ -24,7 +30,6 @@ const VictoryScatterGraph = (props) => (
       data={props.data}
       x={"timestamp"}
       y={"actual"}
-      size={3}
       symbol={(data) => {
         if (props.selectedStructure[`${data.timestamp}-${data.party_size}`]) {
           return "triangleUp"
@@ -45,19 +50,13 @@ const VictoryScatterGraph = (props) => (
             [{
               mutation: (elementProps) => {
                 props.setSelectedRows(elementProps.datum)
-                return {
-                  style:
-                    Object.assign({}, elementProps.style, {
-                      fill: "yellow"
-                    })
-                }
               }
             }]
           )
         }
       }]}
     />
-  </svg>
+  </VictoryChart>
 )
 
 VictoryScatterGraph.propTypes = {

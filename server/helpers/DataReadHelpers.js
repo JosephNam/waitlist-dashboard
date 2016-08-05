@@ -23,6 +23,7 @@ function readFile(file, enc, partySizes, startstamp, endstamp) {
         const valid = _(json)
           .filter((datum) => _(partySizes).includes(datum.party_size))
           .filter((datum) => (datum.timestamp >= startstamp && datum.timestamp < endstamp))
+          .reverse()
           .value()
         fulfill(valid)
       }
@@ -67,7 +68,8 @@ function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
               availability: item.availability / item.totalInTimeFrame,
               totalInTimeFrame: item.totalInTimeFrame,
               timestamp: item.timestamp,
-              party_size: item.party_size
+              party_size: item.party_size,
+              size: item.totalInTimeFrame / 10000
             })
             byTimeFrame[`${size}`].push({
               timestamp: party.timestamp,
@@ -105,26 +107,22 @@ function processData(file, enc, restaurantID = null,
 }
 
 function processDateRange(dir, restaurantID = -1,
-  startstamp = 1462233600000, endstamp = today,
+  startstamp = 0, endstamp = today,
   level = GRANULARITY_LEVEL.HOUR, partySizeList = [1, 2, 3, 4, 5, 6]) {
-  console.log(dir, restaurantID, startstamp, endstamp, GRANULARITY_LEVEL.DAY, partySizeList)
   return new Promise((fulfill, reject) => {
     getAllFilesFromFolder(dir)
       .then((files) => {
-        console.log(files)
         const promises = []
         _.forEach(files, (file) => {
           if (file.substring(file.length - 5, file.length) === ".json") {
             const date = new Date(parseInt(file.substring(0, file.length - 5), 10)).valueOf()
             if (date >= startstamp && date < endstamp) {
-              console.log("hello")
               promises.push(processData(`${dir}${file}`, "utf8",
                 restaurantID, startstamp,
                 endstamp, GRANULARITY_LEVEL.DAY, partySizeList))
             }
           }
         })
-        console.log(promises)
         Promise.all(promises)
           .then((values) => {
             const data = {
@@ -136,15 +134,17 @@ function processDateRange(dir, restaurantID = -1,
               6: []
             }
 
-            _.forEach(values, (val, i) => {
+            const finalData = []
+            _.forEach(values, (val) => {
               _.forEach(val, (datum, key) => {
                 data[key].push(datum)
               })
-              _.flatten(data[i])
             })
 
-            console.log(data[1].length)
-            fulfill(data)
+            _.forEach(data, (list) => {
+              finalData.push(list)
+            })
+            fulfill(_.sortBy(_.flattenDeep(finalData)), "timestamp")
           }).catch((err) => {
             console.log(err)
             reject(err)

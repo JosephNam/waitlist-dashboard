@@ -10,6 +10,4 @@ const Store = createStore(
   }),
   applyMiddleware(thunk)
 )
-
-let unsubscribe = Store.subscribe(() => console.log(Store.getState()))
 export default Store

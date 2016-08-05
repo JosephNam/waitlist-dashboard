@@ -11,13 +11,13 @@ import {
 const initialState = new Map({
   dataFilter: {
   },
-  party_sizes: [1, 2, 3, 4, 5, 6],
+  party_sizes: [0, 1, 2, 3, 4, 5, 6],
   isInitialLoad: true,
   isLoadingData: true,
-  data: [],
-  rid: 0,
   startStamp: 0,
-  endStamp: 0,
+  endStamp: new Date().valueOf(),
+  data: [],
+  rid: -1,
   selectedRows: [],
   overquoted: 0,
   windowWidth: window.innerWidth,

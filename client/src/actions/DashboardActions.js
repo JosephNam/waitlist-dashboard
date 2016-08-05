@@ -51,20 +51,22 @@ export function requestData(isInitialLoad) {
   }
 }
 
-export function receiveData(data, filter, isInitialLoad) {
+export function receiveData(data, filter, isInitialLoad, start, end) {
   const selectedStructure = {}
+  /*
   _.forEach(data, (datum) => {
     // selectedStructure[`${datum.reservation_id}`] = datum.selected
     selectedStructure[`${datum.timestamp}-${datum.party_size}`] = datum.selected
   })
+ */
   return {
     type: RECEIVE_DATA,
     data,
     dataFilter: filter,
     isInitialLoad,
     selectedStructure,
-    start: data[0].timestamp,
-    end: data[data.length - 1].timestamp
+    start,
+    end
   }
 }
 
@@ -84,16 +86,8 @@ export function fetchData(url,
       .set("application/json")
       .then((res) => {
         setTimeout(() => {
-          const data = []
-          _.each(res.body, (size) => {
-            _.each(size, (set) => {
-              _.each(set, (datum) => {
-                data.push(datum)
-              })
-            })
-          })
-          console.log(data)
-          dispatch(receiveData(data, filter, isInitialLoad))
+          console.log(res.body)
+          dispatch(receiveData(res.body, filter, isInitialLoad, filter.startstamp, filter.endstamp))
           // dispatch(fetchOverquoted())
         }
         , 1500)

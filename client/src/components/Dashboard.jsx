@@ -31,13 +31,22 @@ const propTypes = {
   party_sizes: PropTypes.array,
   start: PropTypes.number,
   end: PropTypes.number,
-  selectedStructure: PropTypes.object
+  selectedStructure: PropTypes.object,
+  startStamp: PropTypes.number,
+  endStamp: PropTypes.number,
+  rid: PropTypes.array
 }
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props)
-    this.props.load("/estimates", this.props.dataFilter, this.props.party_sizes, true)
+    this.filter = {
+      startstamp: this.props.startStamp,
+      endstamp: this.props.endStamp,
+      party_sizes: this.props.party_sizes,
+      rid: this.props.rid
+    }
+    this.props.load("/estimates", this.filter, this.props.party_sizes, true)
     console.log(this.props.dataFilter)
     this.state = {
       start: 0,
@@ -75,7 +84,7 @@ export default class Dashboard extends React.Component {
             <div className="col l2 controls">
               <PanelControls
                 reloadData={this.props.reloadData}
-                dataFilter={this.props.dataFilter}
+                dataFilter={this.filter}
               />
             </div>
             <div className="col l8 visualization">

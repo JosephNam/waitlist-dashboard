@@ -5,7 +5,6 @@ import Dashboard from "../components/Dashboard"
 
 const mapStateToProps = (state) => ({
   data: state.dashboard.get("data"),
-  dataFilter: state.dashboard.toJS().dataFilter,
   isLoadingData: state.dashboard.get("isLoadingData"),
   overquoted: state.dashboard.get("overquoted"),
   windowWidth: state.dashboard.get("windowWidth"),
@@ -13,7 +12,9 @@ const mapStateToProps = (state) => ({
   isInitialLoad: state.dashboard.get("isInitialLoad"),
   selectedRows: state.dashboard.get("selectedRows"),
   party_sizes: state.dashboard.get("party_sizes"),
-  selectedStructure: state.dashboard.get("selectedStructure")
+  selectedStructure: state.dashboard.get("selectedStructure"),
+  startStamp: state.dashboard.get("startStamp"),
+  endStamp: state.dashboard.get("endStamp")
 })
 
 const mapDispatchToProps = (dispatch) => (

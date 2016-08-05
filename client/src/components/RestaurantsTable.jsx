@@ -54,7 +54,7 @@ class RestaurantsTable extends React.Component {
             <TableHeaderColumn tooltip="party_size">party_size</TableHeaderColumn>
             <TableHeaderColumn tooltip="actual">actual</TableHeaderColumn>
             <TableHeaderColumn tooltip="quoted">quoted</TableHeaderColumn>
-            <TableHeaderColumn tooltip="estimated">estimated</TableHeaderColumn>
+            <TableHeaderColumn tooltip="availability">availability</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -73,7 +73,7 @@ class RestaurantsTable extends React.Component {
             <TableRowColumn>{row.party_size}</TableRowColumn>
             <TableRowColumn>{row.actual}</TableRowColumn>
             <TableRowColumn>{row.quoted}</TableRowColumn>
-            <TableRowColumn>{row.estimated}</TableRowColumn>
+            <TableRowColumn>{row.availability}</TableRowColumn>
           </TableRow>
           )
         )}

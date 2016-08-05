@@ -6,7 +6,8 @@ import FilterInput from "../components/FilterInput"
 const mapStateToProps = (state) => ({
   rid: state.dashboard.get("rid"),
   startStamp: state.dashboard.get("startStamp"),
-  endStamp: state.dashboard.get("endStamp")
+  endStamp: state.dashboard.get("endStamp"),
+  party_sizes: state.dashboard.get("party_sizes")
 })
 
 const mapDispatchToProps = (dispatch) => (

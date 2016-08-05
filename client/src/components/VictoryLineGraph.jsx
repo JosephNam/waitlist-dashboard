@@ -13,6 +13,11 @@ const VictoryLineGraph = (props) => (
     <VictoryAxis
       height={500}
       width={((props.windowWidth / 12) * 8) - 15}
+      domainPadding={{ x: 15, y: 15 }}
+      tickFormat={props.data.map((datum) => {
+        const tick = new Date(datum.timestamp)
+        return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
+      })}
       label="x-axis (Month - Day - Hour)"
       standalone={false}
       orientation="bottom"
@@ -69,46 +74,6 @@ const VictoryLineGraph = (props) => (
       interpolation={"basis"}
       x={"timestamp"}
       y={"actual"}
-    />
-    <VictoryScatter
-      standalone={false}
-      height={500}
-      width={((props.windowWidth / 12) * 8) - 15}
-      data={props.data}
-      x={"timestamp"}
-      y={"actual"}
-      symbol={(data) => {
-        if (props.selectedStructure[`${data.timestamp}-${data.party_size}`]) {
-          return "triangleUp"
-        }
-        return "circle"
-      }}
-      style={{
-        data: {
-          fill: (data) => (
-            COLORS[data.party_size]
-          )
-        }
-      }}
-      events={[{
-        target: "data",
-        eventHandlers: {
-          onClick: () => (
-            [{
-              mutation: (elementProps) => {
-                props.setSelectedRows(elementProps.datum)
-                return {
-                  style:
-                    Object.assign({}, elementProps.style, {
-                      fill: "yellow"
-                    })
-                }
-              }
-            }]
-          )
-        }
-      }]}
-      size={3}
     />
   </VictoryChart>
 )
