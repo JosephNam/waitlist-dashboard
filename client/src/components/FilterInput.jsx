@@ -49,7 +49,7 @@ export default class FilterInput extends React.Component {
 
   render() {
     return (
-      <div className="row">
+      <div className="col l12 m12 s12 ">
         <form
           id="filter_inputs"
           className="col l12"
@@ -61,7 +61,7 @@ export default class FilterInput extends React.Component {
               this.props.party_sizes)
           }}
         >
-          <div className="row">
+          <div className="row col l10 offset-l2">
             {// <div className="col s3">
             //   <TextField
             //     hintText="Search By RID(s)"
@@ -71,22 +71,22 @@ export default class FilterInput extends React.Component {
             //   />
             // </div>
           }
-            <div className="col s3">
+            <div className="col s3 m4">
               <DatePicker
                 autoOk
-                hintText="Start date of filter"
+                hintText="Start date"
                 dialogContainerStyle={{ color: "red" }}
                 onChange={this.handleStart}
               />
             </div>
-            <div className="col s3">
+            <div className="col s3 m4">
               <DatePicker
                 autoOk
-                hintText="End date of filter"
+                hintText="End date"
                 onChange={this.handleEnd}
               />
             </div>
-            <div className="col s3">
+            <div className="col s3 m4 push-s3">
               <FlatButton
                 label="Display"
                 type="submit"

@@ -7,9 +7,8 @@ const router = new express.Router()
 // const development = process.env.NODE_ENV !== "production"
 
 
-let cache = []
-datahelper.processDateRange("./server/mocks/waitlistService/").then((allData) => {
-  cache = allData
+datahelper.init("./server/mocks/waitlistService/").then((cache) => {
+  console.log("the cache is ready", cache.length)
   router.get("/", (req, res) => {
     logger.info("received request to /")
     res.render("index")
@@ -33,7 +32,7 @@ datahelper.processDateRange("./server/mocks/waitlistService/").then((allData) =>
     const filters = req.query
     console.log(filters)
     const partySizes = _.map(filters.party_sizes, (party) => parseInt(party, 10))
-    const filtered = _(cache)
+    const filtered = _(cache.averages)
       .filter((datum) => _(partySizes).includes(datum.party_size))
       .filter((datum) => (
         datum.timestamp >= parseInt(filters.startstamp, 10)
@@ -41,38 +40,11 @@ datahelper.processDateRange("./server/mocks/waitlistService/").then((allData) =>
       ))
       .value()
     res.json(filtered)
-
-    /*
-    if (filters.party_sizes) {
-      return datahelper
-        .processDateRange("./server/mocks/waitlistService/",
-            filters.restaurantID, filters.startstamp, filters.endstamp, filters.level, partySizes)
-        .then((data) => {
-          console.log("sending data to client")
-          res.json(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-    return datahelper
-      .processDateRange("./server/mocks/waitlistService/",
-          filters.restaurantID, filters.startstamp, filters.endstamp, filters.level)
-      .then((data) => {
-        console.log("sending data to client", data)
-        res.json(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-     */
   })
 
   router.get("/overquoted", (req, res) => {
     logger.info("received request to /overquoted")
-    return datahelper
-      .getOverQuoted("./server/mocks/waitlistService/someData.json", "utf8")
-      .then((num) => res.json(num * 100))
+    res.json(cache.overquotes.lowOverquote)
   })
 })
 module.exports = router

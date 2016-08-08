@@ -1,6 +1,8 @@
 import React, { PropTypes } from "react"
 import { VictoryAxis, VictoryChart, VictoryScatter } from "victory"
 import { COLORS } from "../helpers/ColorHelpers"
+import DashboardLabels from "./Labels"
+
 
 const VictoryScatterGraph = (props) => (
   <VictoryChart
@@ -35,6 +37,11 @@ const VictoryScatterGraph = (props) => (
         }
         return "circle"
       }}
+      labels={(datum) => {
+        const tick = new Date(datum.timestamp)
+        return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
+      }}
+      labelComponent={<DashboardLabels />}
       style={{
         data: {
           fill: (data) => (
@@ -45,6 +52,28 @@ const VictoryScatterGraph = (props) => (
       events={[{
         target: "data",
         eventHandlers: {
+          onMouseOver: () => {
+            console.log("mouse in")
+            return [
+              {
+                target: "labels",
+                mutation: (a) => {
+                  a["active"] = true
+                  return a
+                }
+              }
+            ]
+          },
+          onMouseOut: () => {
+            console.log("mouse out")
+            return [
+              {
+                target: "labels",
+                mutation: () => {
+                }
+              }
+            ]
+          },
           onClick: () => (
             [{
               mutation: (elementProps) => {

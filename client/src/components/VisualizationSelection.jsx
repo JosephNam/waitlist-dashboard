@@ -1,11 +1,10 @@
 import React, { PropTypes } from "react"
-import Store from "../Store"
-import { setVisualizationFilter, VisualizationFilters } from "../actions/VisualizationActions"
 import DropDownMenu from "material-ui/DropDownMenu"
 import MenuItem from "material-ui/MenuItem"
+import Store from "../Store"
+import { setVisualizationFilter, VisualizationFilters } from "../actions/VisualizationActions"
 
 function switchFilter(filter) {
-  console.log(filter)
   Store.dispatch(setVisualizationFilter(filter))
 }
 

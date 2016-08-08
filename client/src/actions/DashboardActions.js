@@ -86,9 +86,8 @@ export function fetchData(url,
       .set("application/json")
       .then((res) => {
         setTimeout(() => {
-          console.log(res.body)
           dispatch(receiveData(res.body, filter, isInitialLoad, filter.startstamp, filter.endstamp))
-          // dispatch(fetchOverquoted())
+          dispatch(fetchOverquoted())
         }
         , 1500)
       })

@@ -62,15 +62,28 @@ function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
             byTimeFrame[`${size}`][index].totalInTimeFrame++
           } else {
             const item = byTimeFrame[`${size}`][index]
-            averages[`${size}`].push({
-              quoted: item.quoted / item.totalInTimeFrame,
-              actual: item.actual / item.totalInTimeFrame,
-              availability: item.availability / item.totalInTimeFrame,
-              totalInTimeFrame: item.totalInTimeFrame,
-              timestamp: item.timestamp,
-              party_size: item.party_size,
-              size: item.totalInTimeFrame / 10000
-            })
+            // normalize party size 2 since it is so much larger than the others
+            if (item.party_size === 2) {
+              averages[`${size}`].push({
+                quoted: item.quoted / item.totalInTimeFrame,
+                actual: item.actual / item.totalInTimeFrame,
+                availability: item.availability / item.totalInTimeFrame,
+                totalInTimeFrame: item.totalInTimeFrame,
+                timestamp: item.timestamp,
+                party_size: item.party_size,
+                size: Math.log(item.totalInTimeFrame / 8500) + 1
+              })
+            } else {
+              averages[`${size}`].push({
+                quoted: item.quoted / item.totalInTimeFrame,
+                actual: item.actual / item.totalInTimeFrame,
+                availability: item.availability / item.totalInTimeFrame,
+                totalInTimeFrame: item.totalInTimeFrame,
+                timestamp: item.timestamp,
+                party_size: item.party_size,
+                size: item.totalInTimeFrame / 8500
+              })
+            }
             byTimeFrame[`${size}`].push({
               timestamp: party.timestamp,
               quoted: 0,
@@ -144,7 +157,9 @@ function processDateRange(dir, restaurantID = -1,
             _.forEach(data, (list) => {
               finalData.push(list)
             })
-            fulfill(_.sortBy(_.flattenDeep(finalData)), "timestamp")
+            const fd = _.sortBy(_.flattenDeep(finalData), "timestamp")
+            // console.log("final data is ", fd)
+            fulfill(fd)
           }).catch((err) => {
             console.log(err)
             reject(err)
@@ -153,24 +168,92 @@ function processDateRange(dir, restaurantID = -1,
   })
 }
 
-function getOverQuoted(file, enc) {
+function getOverQuoted(data) {
+  const lowOverquoteLength = (_.filter(data, (datum) => (
+    (datum.quoted - datum.actual <= 10) && datum.actual !== 0
+  ))).length
+
+  const highOverquoteLength = (_.filter(data, (datum) => (
+    (datum.quoted - datum.actual) > 10 && datum.actual !== 0))).length
+  const waitDataLength = lowOverquoteLength + highOverquoteLength
+  const lowOverquote = lowOverquoteLength / waitDataLength * 100
+  const highOverquote = highOverquoteLength / waitDataLength * 100
+
+  console.log("GEToverquoted", lowOverquote, highOverquote)
+  return {
+    lowOverquote,
+    highOverquote
+  }
+}
+
+function calculateStats(dir, startstamp = 0, endstamp = today) {
   return new Promise((fulfill, reject) => {
-    readFile(file, enc)
-      .then((data) => {
-        try {
-          let count = 0
-          _.forEach(data, (val) => {
-            if (val.quoted > val.actual) count++
+    try {
+      getAllFilesFromFolder(dir).then((files) => {
+        const promises = []
+        _.forEach(files, (file) => {
+          if (file.substring(file.length - 5, file.length) === ".json") {
+            const date = new Date(parseInt(file.substring(0, file.length - 5), 10)).valueOf()
+            if (date >= startstamp && date < endstamp) {
+              promises.push(readFile(`${dir}${file}`, "utf8",
+              [1, 2, 3, 4, 5, 6], startstamp, endstamp))
+            }
+          }
+        })
+        const data = []
+        Promise.all(promises).then((vals) => {
+          // console.log("vals length is ", vals.length)
+          _.forEach(vals, (val) => {
+            // console.log("val is ", val)
+            data.push(val)
           })
-          fulfill((count * 1.0) / data.length)
-        } catch (ex) {
-          reject(ex)
-        }
+          // console.log("datalenght", data.length)
+          // console.log(data)
+          const allData = _.flatten(data)
+          // all data is good
+          // console.log("all datalenght", allData.length)
+          const overquotes = getOverQuoted(allData)
+          // console.log("overquotes is ", overquotes)
+          fulfill({
+            allData,
+            overquotes
+          })
+        })
       })
+    } catch (ex) {
+      reject(ex)
+    }
+  })
+}
+
+function init(dir) {
+  return new Promise((fulfill, reject) => {
+    try {
+      const cache = {}
+      processDateRange(dir).then((averages) => {
+        cache.averages = averages
+        calculateStats(dir).then((stats) => {
+          cache.allData = stats.allData
+          cache.overquotes = stats.overquotes
+          fulfill(cache)
+        })
+      })
+    } catch (ex) {
+      console.log(ex)
+      reject(ex)
+    }
   })
 }
 
 module.exports = {
   processDateRange,
-  getOverQuoted
+  getOverQuoted,
+  calculateStats,
+  init
 }
+
+// init("../mocks/smallData/")
+// .then((cache) => {
+//   console.log(cache)
+//   console.log("cache overquotes", cache.overquotes.length)
+// })

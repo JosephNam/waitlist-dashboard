@@ -2,7 +2,7 @@ import React, { PropTypes } from "react"
 import { Card, CardHeader } from "material-ui/Card"
 
 const StatBadges = (props) => (
-  <div className="row">
+  <div className="row col l10 offset-l2">
     <div className="col s6 m3">
       <Card>
         <CardHeader

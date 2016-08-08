@@ -3,9 +3,11 @@ import { List, ListItem } from "material-ui/List"
 import Subheader from "material-ui/Subheader"
 import Divider from "material-ui/Divider"
 import Checkbox from "material-ui/Checkbox"
-import Toggle from "material-ui/Toggle"
-import Paper from 'material-ui/Paper';
+import Paper from "material-ui/Paper"
 import PartySizeControl from "./PartySizeControl"
+import ContentSend from "material-ui/svg-icons/action/timeline"
+import { COLORS } from "../helpers/ColorHelpers"
+
 
 const styles = {
   root: {
@@ -22,16 +24,62 @@ const FilterSettings = (props) => (
     <Paper zDepth={1} className="col l12 m12 s12">
       <List>
         <Subheader>Party Size</Subheader>
-          <PartySizeControl reloadData={props.reloadData} dataFilter={props.dataFilter} />
+        <PartySizeControl reloadData={props.reloadData} dataFilter={props.dataFilter} />
       </List>
       <Divider />
       <List>
         <Subheader>Origin</Subheader>
-        <ListItem primaryText="Online" rightToggle={<Toggle />} />
-        <ListItem primaryText="Walk-in" rightToggle={<Toggle />} />
+        <ListItem primaryText="Online" leftCheckbox={<Checkbox />} />
+        <ListItem primaryText="Walk-in" leftCheckbox={<Checkbox />} />
+      </List>
+      <Divider />
+      <List>
+        <Subheader>Line Graph Legend</Subheader>
+        <ListItem
+          primaryText="availability"
+          disabled={true}
+          leftCheckbox={
+            <Checkbox
+              id={1}
+              key={1}
+              checkedIcon={<ContentSend />}
+              uncheckedIcon={<ContentSend />}
+              checked={true}
+              iconStyle={{ fill: COLORS.ESTIMATED }}
+            />
+          }
+        />
+        <ListItem
+          primaryText="actual"
+          disabled={true}
+          leftCheckbox={
+            <Checkbox
+              id={2}
+              key={2}
+              checkedIcon={<ContentSend />}
+              uncheckedIcon={<ContentSend />}
+              checked={true}
+              iconStyle={{ fill: COLORS.ACTUAL }}
+            />
+          }
+        />
+        <ListItem
+          primaryText="quoted"
+          disabled={true}
+          leftCheckbox={
+            <Checkbox
+              id={2}
+              key={2}
+              checkedIcon={<ContentSend />}
+              uncheckedIcon={<ContentSend />}
+              checked={true}
+              iconStyle={{ fill: COLORS.QUOTED }}
+            />
+          }
+        />
       </List>
     </Paper>
   </div>
 )
-
+FilterSettings.propTypes = propTypes
 export default FilterSettings

@@ -84,36 +84,40 @@ export default class Dashboard extends React.Component {
             <StatBadges overquoted={this.props.overquoted} />
           </div>
           <div className="row">
-            <div className="col l2 m6 s11 offset-s1 controls">
-              <FilterSettings
-                reloadData={this.props.reloadData}
-                dataFilter={this.filter}
-              />
-            </div>
-            <div className="col l9 m11 s11 offset-s1">
+            <div className="col l11 m11 s11">
               <div hidden={!this.props.isLoadingData}>
                 <LinearProgress color={"red"} />
               </div>
               <div hidden={this.props.isLoadingData}>
                 <div className="row">
                   <FilterContainer />
-                  <VisualizationSelection />
-                    {getVisible(this.props.visualizationFilter,
-                      this.props.data,
-                      this.props.windowWidth,
-                      this.props.start,
-                      this.props.end,
-                      this.state.selectedStructure,
-                      this.setSelectedRows
-                    )}
-                  <Paper zDepth={1}>
-                    <RestaurantsTable
-                      data={this.props.data}
-                      selectedStructure={this.state.selectedStructure}
-                      setSelectedRows={this.setSelectedRows}
-                      windowWidth={this.props.windowWidth}
-                    />
-                  </Paper>
+                  <div className="row">
+                    <div className="col l2 m6 s10 offset-s1">
+                      <FilterSettings
+                        reloadData={this.props.reloadData}
+                        dataFilter={this.filter}
+                      />
+                    </div>
+                    <div className="col l9 m12 s10 offset-s1">
+                      <VisualizationSelection />
+                        {getVisible(this.props.visualizationFilter,
+                          this.props.data,
+                          this.props.windowWidth,
+                          this.props.start,
+                          this.props.end,
+                          this.state.selectedStructure,
+                          this.setSelectedRows
+                        )}
+                      <Paper zDepth={1}>
+                        <RestaurantsTable
+                          data={this.props.data}
+                          selectedStructure={this.state.selectedStructure}
+                          setSelectedRows={this.setSelectedRows}
+                          windowWidth={this.props.windowWidth}
+                        />
+                      </Paper>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -12,7 +12,7 @@ test("get /", t => {
     })
 })
 
-test("get /health", t=> {
+test("get /health", t => {
   request.get("/health")
     .then((res) => {
       t.is(res.health, true)
