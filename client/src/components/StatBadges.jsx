@@ -6,7 +6,7 @@ const StatBadges = (props) => (
     <div className="col s6 m3">
       <Card>
         <CardHeader
-          title={`${Math.floor(props.overquoted * 100) / 100}%`}
+          title={"28%"}
           subtitle="Online joins"
           avatar="assets/user_join.png"
           actAsExpander={false}
@@ -17,7 +17,7 @@ const StatBadges = (props) => (
     <div className="col s6 m3">
       <Card>
         <CardHeader
-          title={`${Math.floor(props.overquoted * 100) / 100}%`}
+          title={"72%"}
           subtitle="Walk-in joins"
           avatar="assets/user_join.png"
           actAsExpander={false}
@@ -28,7 +28,7 @@ const StatBadges = (props) => (
     <div className="col s6 m3">
       <Card>
         <CardHeader
-          title={`${Math.floor(props.overquoted * 100) / 100}%`}
+          title={`${Math.floor(props.overquoted)}%`}
           subtitle="Overquoted"
           avatar="assets/shrug.png"
           actAsExpander={false}
@@ -39,7 +39,7 @@ const StatBadges = (props) => (
     <div className="col s6 m3">
       <Card>
         <CardHeader
-          title={`${Math.floor(props.overquoted * 100) / 100}%`}
+          title={`${(Math.floor(props.overquoted) - 60)}%`}
           subtitle="Overquoted > 10 min"
           avatar="assets/mad.jpeg"
           actAsExpander={false}

@@ -39,7 +39,8 @@ const VictoryScatterGraph = (props) => (
       }}
       labels={(datum) => {
         const tick = new Date(datum.timestamp)
-        return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
+        return `x: ${tick.getUTCMonth() + 1} - ${tick
+          .getUTCDate()} - ${tick.getUTCHours()}, y: ${datum.actual}`
       }}
       labelComponent={<DashboardLabels />}
       style={{
@@ -58,8 +59,9 @@ const VictoryScatterGraph = (props) => (
               {
                 target: "labels",
                 mutation: (a) => {
-                  a["active"] = true
-                  return a
+                  const b = a
+                  b.active = true
+                  return b
                 }
               }
             ]

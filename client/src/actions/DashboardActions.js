@@ -53,12 +53,6 @@ export function requestData(isInitialLoad) {
 
 export function receiveData(data, filter, isInitialLoad, start, end) {
   const selectedStructure = {}
-  /*
-  _.forEach(data, (datum) => {
-    // selectedStructure[`${datum.reservation_id}`] = datum.selected
-    selectedStructure[`${datum.timestamp}-${datum.party_size}`] = datum.selected
-  })
- */
   return {
     type: RECEIVE_DATA,
     data,
@@ -139,7 +133,6 @@ export function setEndStamp(value) {
 
 export function setSelectedRows(selectedRows, oldData) {
   const data = oldData
-  // index the selected points in the data set
   for (let i = 0; i < data.length; i++) {
     if (selectedRows.indexOf(i) !== -1) {
       data[i].selected = true
@@ -147,12 +140,6 @@ export function setSelectedRows(selectedRows, oldData) {
       data[i].selected = false
     }
   }
-  /*
-  const data = _.map(oldData, (datum, i) => (
-    datum.selected !== -1
-  ))
- */
-
   return {
     type: SET_SELECTED_ROWS,
     selectedRows,

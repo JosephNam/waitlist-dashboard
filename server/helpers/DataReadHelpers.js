@@ -176,10 +176,8 @@ function getOverQuoted(data) {
   const highOverquoteLength = (_.filter(data, (datum) => (
     (datum.quoted - datum.actual) > 10 && datum.actual !== 0))).length
   const waitDataLength = lowOverquoteLength + highOverquoteLength
-  const lowOverquote = lowOverquoteLength / waitDataLength * 100
-  const highOverquote = highOverquoteLength / waitDataLength * 100
-
-  console.log("GEToverquoted", lowOverquote, highOverquote)
+  const lowOverquote = (lowOverquoteLength / waitDataLength) * 100
+  const highOverquote = (highOverquoteLength / waitDataLength) * 100
   return {
     lowOverquote,
     highOverquote
@@ -202,18 +200,11 @@ function calculateStats(dir, startstamp = 0, endstamp = today) {
         })
         const data = []
         Promise.all(promises).then((vals) => {
-          // console.log("vals length is ", vals.length)
           _.forEach(vals, (val) => {
-            // console.log("val is ", val)
             data.push(val)
           })
-          // console.log("datalenght", data.length)
-          // console.log(data)
           const allData = _.flatten(data)
-          // all data is good
-          // console.log("all datalenght", allData.length)
           const overquotes = getOverQuoted(allData)
-          // console.log("overquotes is ", overquotes)
           fulfill({
             allData,
             overquotes

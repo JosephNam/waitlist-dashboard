@@ -1,7 +1,6 @@
 import React, { PropTypes } from "react"
 import { VictoryChart, VictoryAxis,
-  VictoryLine,
-  VictoryScatter
+  VictoryLine
 } from "victory"
 import { COLORS } from "../helpers/ColorHelpers"
 
@@ -14,12 +13,11 @@ const VictoryLineGraph = (props) => (
       height={500}
       width={((props.windowWidth / 12) * 8) - 15}
       domainPadding={{ x: 15, y: 15 }}
-      tickFormat={props.data.map((datum) => {
-        const tick = new Date(datum.timestamp)
+      tickFormat={(x) => {
+        const tick = new Date(x)
         return `${tick.getUTCMonth() + 1} - ${tick.getUTCDate()} - ${tick.getUTCHours()}`
-      })}
+      }}
       label="x-axis (Month - Day - Hour)"
-      standalone={false}
       orientation="bottom"
     />
     <VictoryAxis

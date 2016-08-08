@@ -8,7 +8,6 @@ const router = new express.Router()
 
 
 datahelper.init("./server/mocks/waitlistService/").then((cache) => {
-  console.log("the cache is ready", cache.length)
   router.get("/", (req, res) => {
     logger.info("received request to /")
     res.render("index")

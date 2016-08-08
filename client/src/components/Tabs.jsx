@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react"
+import { Tabs, Tab } from "material-ui/Tabs"
 import Store from "../Store"
 import { setVisualizationFilter, VisualizationFilters } from "../actions/VisualizationActions"
-import { Tabs, Tab } from "material-ui/Tabs"
 
 function switchFilter(filter) {
   console.log(filter)
@@ -14,9 +14,6 @@ export default class VisualizationSelection extends React.Component {
   }
 
   render() {
-    this.props.list.map((item) => (
-      console.log(item.name)
-    ))
     return (
       <div>
         <Tabs

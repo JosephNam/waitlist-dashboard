@@ -1,18 +1,14 @@
 import React, { PropTypes } from "react"
 import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
-// import VisibleVisualization from "../containers/VisualizationContainer"
+import Paper from "material-ui/Paper"
 import VisualizationSelection from "./Tabs"
 import FilterContainer from "../containers/FilterContainer"
-// import VisibleRestaurantsTable from "../containers/TableContainer"
 import StatBadges from "./StatBadges"
 import { VisualizationFilters } from "../actions/VisualizationActions"
-// import { getVisible } from "../helpers/VisualizationHelpers"
-import PanelControls from "./PanelControls"
 import RestaurantsTable from "./RestaurantsTable"
 import getVisible from "../helpers/VisualizationHelpers"
 import FilterSettings from "./SettingsList"
-import Paper from "material-ui/Paper"
 
 
 const propTypes = {
@@ -50,7 +46,6 @@ export default class Dashboard extends React.Component {
       rid: this.props.rid
     }
     this.props.load("/estimates", this.filter, this.props.party_sizes, true)
-    console.log(this.props.dataFilter)
     this.state = {
       start: 0,
       end: -1,
@@ -58,13 +53,11 @@ export default class Dashboard extends React.Component {
       selectedStructure: this.props.selectedStructure
     }
     this.setSelectedRows = this.setSelectedRows.bind(this)
-    console.log(this.state)
   }
 
   setSelectedRows(row) {
     const temp = this.state.selectedStructure
     temp[`${row.timestamp}-${row.party_size}`] = !temp[`${row.timestamp}-${row.party_size}`]
-    console.log(row)
     this.setState({
       start: this.state.start,
       end: this.state.end,
@@ -80,7 +73,7 @@ export default class Dashboard extends React.Component {
           <CircularProgress size={2} color={"red"} />
         </div>
         <div hidden={this.props.isInitialLoad}>
-          <div className="badges" align="center">
+          <div className="badges">
             <StatBadges overquoted={this.props.overquoted} />
           </div>
           <div className="row">
