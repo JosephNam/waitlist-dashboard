@@ -1,14 +1,14 @@
 import React, { PropTypes } from "react"
 import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
-import Paper from "material-ui/Paper"
+// import Paper from "material-ui/Paper"
 import VisualizationSelection from "./Tabs"
 import FilterContainer from "../containers/FilterContainer"
 import StatBadges from "./StatBadges"
 import { VisualizationFilters } from "../actions/VisualizationActions"
-import RestaurantsTable from "./RestaurantsTable"
-import getVisible from "../helpers/VisualizationHelpers"
+// import RestaurantsTable from "./RestaurantsTable"
 import FilterSettings from "./SettingsList"
+import Graph from "../Graph"
 
 
 const propTypes = {
@@ -33,7 +33,8 @@ const propTypes = {
   selectedStructure: PropTypes.object,
   startStamp: PropTypes.number,
   endStamp: PropTypes.number,
-  rid: PropTypes.array
+  rid: PropTypes.array,
+  desired: PropTypes.object
 }
 
 export default class Dashboard extends React.Component {
@@ -91,24 +92,12 @@ export default class Dashboard extends React.Component {
                         dataFilter={this.filter}
                       />
                     </div>
-                    <div className="col l9 m12 s10 offset-s1">
+                    <div id="visualization" className="col l9 m12 s10 offset-s1">
                       <VisualizationSelection />
-                        {getVisible(this.props.visualizationFilter,
-                          this.props.data,
-                          this.props.windowWidth,
-                          this.props.start,
-                          this.props.end,
-                          this.state.selectedStructure,
-                          this.setSelectedRows
-                        )}
-                      <Paper zDepth={1}>
-                        <RestaurantsTable
-                          data={this.props.data}
-                          selectedStructure={this.state.selectedStructure}
-                          setSelectedRows={this.setSelectedRows}
-                          windowWidth={this.props.windowWidth}
-                        />
-                      </Paper>
+                      <Graph
+                        data={this.props.data}
+                        type={this.props.visualizationFilter}
+                      />
                     </div>
                   </div>
                 </div>
