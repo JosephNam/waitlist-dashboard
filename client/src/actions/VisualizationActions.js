@@ -4,9 +4,20 @@ export const REQUEST_DATA = "REQUEST_DATA"
 export const RECEIVE_DATA = "RECEIVE_DATA"
 
 export const VisualizationFilters = {
-  SCATTER_PLOT: "SCATTER_PLOT",
-  LINE_GRAPH: "LINE_GRAPH",
-  BAR_GRAPH: "BAR_GRAPH"
+  SCATTER_PLOT: {
+    title: "Scatter Plot",
+    plotly_type: "scattergl",
+    mode: "markers"
+  },
+  LINE_GRAPH: {
+    title: "Line Graph",
+    plotly_type: "lines",
+    mode: "lines"
+  },
+  BAR_GRAPH: {
+    title: "Bar Graph",
+    plotly_type: "bar"
+  }
 }
 
 export function setVisualizationFilter(filter) {

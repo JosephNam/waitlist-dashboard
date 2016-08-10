@@ -95,8 +95,9 @@ export default class Dashboard extends React.Component {
                     <div id="visualization" className="col l9 m12 s10 offset-s1">
                       <VisualizationSelection />
                       <Graph
+                        windowWidth={this.props.windowWidth}
                         data={this.props.data}
-                        type={this.props.visualizationFilter}
+                        graphType={this.props.visualizationFilter}
                       />
                     </div>
                   </div>

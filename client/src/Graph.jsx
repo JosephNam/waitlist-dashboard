@@ -2,12 +2,21 @@
 /* global window: true */
 import React, { PropTypes } from "react"
 import _ from "lodash"
+import { COLORS } from "./helpers/ColorHelpers"
+
+const propTypes = {
+  windowWidth: PropTypes.number,
+  data: PropTypes.array,
+  graphType: PropTypes.object
+}
 
 export default class Graph extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    this.layout = {
+    this.state = {
+      graphType: props.graphType
+    }
+    this.state.layout = {
       xaxis: {
         type: "date",
         title: "Date"
@@ -15,7 +24,7 @@ export default class Graph extends React.Component {
       yaxis: {
         title: "Actual Wait Time"
       },
-      width: (window.innerWidth / 12) * 8,
+      width: (this.props.windowWidth / 12) * 8,
       height: 600
     }
     this.traces = []
@@ -27,8 +36,8 @@ export default class Graph extends React.Component {
         name: `Party Size ${i}`,
         x,
         y,
-        mode: "markers",
-        type: "scattergl",
+        mode: this.state.graphType.mode,
+        type: this.state.graphType.plotly_type,
         marker: {
           size
         }
@@ -42,13 +51,17 @@ export default class Graph extends React.Component {
   }
 
   componentWillReceiveProps(np) {
+    console.log(np)
     this.setState({
-      data: np.data
+      data: np.data,
+      graphType: np.graphType
     })
   }
 
   shouldComponentUpdate(np, ns) {
-    return this.state.data !== np.data && this.state.data !== ns.data
+    console.log(this.state, ns)
+    console.log(this.state.data !== ns.data || this.state.graphType !== ns.graphType)
+    return this.state.data !== ns.data || this.state.graphType !== ns.graphType
   }
 
   componentDidUpdate() {
@@ -64,21 +77,33 @@ export default class Graph extends React.Component {
       const x = _.map(list, (datum) => (datum.timestamp))
       const y = _.map(list, (datum) => (datum.actual))
       const size = _.map(list, (datum) => (datum.size + 5))
-      const plt = {
-        name: `Party Size ${i}`,
-        x,
-        y,
-        mode: "markers",
-        type: "scattergl",
-        marker: {
-          size
+      let plt
+      if (list[0]) {
+        plt = {
+          name: `Party Size ${i}`,
+          x,
+          y,
+          mode: this.state.graphType.mode,
+          type: this.state.graphType.plotly_type,
+          marker: {
+            color: COLORS[`${list[0].party_size}`],
+            size
+          }
+        }
+      } else {
+        plt = {
+          name: "No Data Found",
+          x,
+          y,
+          mode: this.state.graphType.mode,
+          type: this.state.graphType.plotly_type
         }
       }
       newTraces.push(plt)
     })
     this.traces = newTraces
     console.log(newTraces)
-    Plotly.newPlot("visualization", newTraces, this.layout)
+    Plotly.newPlot("visualization", newTraces, this.state.layout)
   }
 
   render() {
@@ -89,9 +114,7 @@ export default class Graph extends React.Component {
   }
 }
 
-Graph.propTypes = {
-  data: PropTypes.array
-}
+Graph.propTypes = propTypes
 
 Graph.defaultProps = {
   data: []

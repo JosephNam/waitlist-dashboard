@@ -4,7 +4,6 @@ import Store from "../Store"
 import { setVisualizationFilter, VisualizationFilters } from "../actions/VisualizationActions"
 
 function switchFilter(filter) {
-  console.log(filter)
   Store.dispatch(setVisualizationFilter(filter))
 }
 
@@ -21,11 +20,13 @@ export default class VisualizationSelection extends React.Component {
           onChange={this.handleChange}
         >
           <Tab
-            label="scatter" value={`${VisualizationFilters.SCATTER_PLOT}`}
+            label={`${VisualizationFilters.SCATTER_PLOT.title}`}
+            value={VisualizationFilters.SCATTER_PLOT}
             style={{ backgroundColor: "rgb(218, 55, 67)" }}
           />
           <Tab
-            label="line" value={`${VisualizationFilters.LINE_GRAPH}`}
+            label={`${VisualizationFilters.LINE_GRAPH.title}`}
+            value={VisualizationFilters.LINE_GRAPH}
             style={{ backgroundColor: "rgb(218, 55, 67)" }}
           />
         </Tabs>
