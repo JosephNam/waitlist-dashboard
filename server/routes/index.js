@@ -6,7 +6,7 @@ const _ = require("lodash")
 const router = new express.Router()
 // const development = process.env.NODE_ENV !== "production"
 
-
+// force datahelper and values to be cached before routes can be serviced
 datahelper.init("./server/mocks/waitlistService/").then((cache) => {
   router.get("/", (req, res) => {
     logger.info("received request to /")
@@ -24,7 +24,7 @@ datahelper.init("./server/mocks/waitlistService/").then((cache) => {
   })
 
   /*
-    can filter based on the given request body
+    can filter cached data based on the given request body
     currently restaurant id, and timestamp within range
   */
   router.get("/estimates", (req, res) => {

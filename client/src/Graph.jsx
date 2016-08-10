@@ -4,6 +4,14 @@ import React, { PropTypes } from "react"
 import _ from "lodash"
 import { COLORS } from "./helpers/ColorHelpers"
 
+/*
+ * form of graphType
+ * {
+ *   plotly_type: string,
+ *   mode: string,
+ *   title: string
+ * }
+ */
 const propTypes = {
   windowWidth: PropTypes.number,
   data: PropTypes.array,
@@ -27,6 +35,7 @@ export default class Graph extends React.Component {
       width: (this.props.windowWidth / 12) * 8,
       height: 600
     }
+    // prepare graph for initial render
     this.traces = []
     _.forEach(this.props.data, (list, i) => {
       const x = _.map(list, (datum) => (datum.timestamp))
@@ -47,24 +56,27 @@ export default class Graph extends React.Component {
   }
 
   componentDidMount() {
+    // work on DOM after render per facebook guidelines
     Plotly.newPlot("visualization", this.traces)
   }
 
   componentWillReceiveProps(np) {
-    console.log(np)
+    // set next state
     this.setState({
       data: np.data,
       graphType: np.graphType
     })
   }
 
+  /*
+   * necessary to avoid unecessary render updates in the middle of render
+   */
   shouldComponentUpdate(np, ns) {
-    console.log(this.state, ns)
-    console.log(this.state.data !== ns.data || this.state.graphType !== ns.graphType)
     return this.state.data !== ns.data || this.state.graphType !== ns.graphType
   }
 
   componentDidUpdate() {
+    // again work on DOM after update
     const data = {}
     const newTraces = []
     _.forEach(this.state.data, (datum) => {
@@ -78,6 +90,7 @@ export default class Graph extends React.Component {
       const y = _.map(list, (datum) => (datum.actual))
       const size = _.map(list, (datum) => (datum.size + 5))
       let plt
+      // if there is data render the graph, else render a default no data found graph
       if (list[0]) {
         plt = {
           name: `Party Size ${i}`,
@@ -108,6 +121,7 @@ export default class Graph extends React.Component {
 
   render() {
     if (!this.state.data) return <div id="visualization" />
+    // dummy render
     return (
       <div id="visualization2" />
     )

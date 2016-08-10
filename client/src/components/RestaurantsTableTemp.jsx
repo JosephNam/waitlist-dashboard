@@ -13,13 +13,13 @@ const RestaurantsTable = (props) => (
       </tr>
     </thead>
     <tbody>
-      {_.map(props.data, (datum) => (
-        <tr>
-          <td>{datum.timestamp}</td>
-          <td>{datum.party_size}</td>
-          <td>{datum.actual}</td>
-          <td>{datum.quoted}</td>
-          <td>{datum.availability}</td>
+      {_.map(props.data, (datum, i) => (
+        <tr key={i}>
+          <td key={`timestamp-${i}`}>{datum.timestamp}</td>
+          <td key={`party-size-${i}`}>{datum.party_size}</td>
+          <td key={`actual-${i}`}>{datum.actual}</td>
+          <td key={`quoted-${i}`}>{datum.quoted}</td>
+          <td key={`availability-${i}`}>{datum.availability}</td>
         </tr>
       ))}
     </tbody>

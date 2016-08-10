@@ -3,6 +3,9 @@ const isSameTimeFrame = require("./TimeHelpers")
 const fs = require("fs")
 const _ = require("lodash")
 
+/*
+* returns a list of files from dir
+*/
 function getAllFilesFromFolder(dir) {
   return new Promise((fulfill, reject) => {
     fs.readdir(dir, (err, files) => {
@@ -12,6 +15,9 @@ function getAllFilesFromFolder(dir) {
   })
 }
 
+/*
+* reads the file and returns its json within the start (inclusive) and endstamp (exclusive)
+*/
 function readFile(file, enc, partySizes, startstamp, endstamp) {
   return new Promise((fulfill, reject) => {
     fs.readFile(file, enc, (err, res) => {
@@ -31,6 +37,9 @@ function readFile(file, enc, partySizes, startstamp, endstamp) {
   })
 }
 
+/*
+* averages the json into a browser ready format
+*/
 function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
   return new Promise((fulfill, reject) => {
     try {
@@ -39,6 +48,8 @@ function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
         const byTimeFrame = {}
         const averages = {}
 
+        // first find the first example of a party size in the data
+        // then set its timeframe
         _([1, 2, 3, 4, 5, 6]).forEach((val) => {
           bySize[`${val}`] = _(json).filter({ party_size: val }).take(1).value()
           byTimeFrame[`${val}`] = [{
@@ -52,6 +63,10 @@ function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
           averages[`${val}`] = []
         })
 
+        // following that sum up the fields while within the same time frame
+        // if not same time frame append the sums by the total in
+        // day field to get average for that time frame
+        // then move on to next timeframe
         _(json).forEach((party) => {
           const size = party.party_size
           const index = byTimeFrame[`${size}`].length - 1
@@ -104,6 +119,7 @@ function granularizeJSON(file, enc, level, partySizes, startstamp, endstamp) {
 
 const today = new Date().getTime()
 
+// Simply calls the averaging function
 function processData(file, enc, restaurantID = null,
   startstamp = 0, endstamp = today,
   level = GRANULARITY_LEVEL.HOUR, partySizeList = [1, 2, 3, 4, 5, 6]) {
@@ -119,6 +135,7 @@ function processData(file, enc, restaurantID = null,
   })
 }
 
+// processes all data in dir and caches data
 function processDateRange(dir, restaurantID = -1,
   startstamp = 0, endstamp = today,
   level = GRANULARITY_LEVEL.HOUR, partySizeList = [1, 2, 3, 4, 5, 6]) {
@@ -168,6 +185,7 @@ function processDateRange(dir, restaurantID = -1,
   })
 }
 
+// gets overquoted within 10 minutes and gets severely overquoted > 10 min
 function getOverQuoted(data) {
   const lowOverquoteLength = (_.filter(data, (datum) => (
     (datum.quoted - datum.actual <= 10) && datum.actual !== 0
@@ -184,6 +202,7 @@ function getOverQuoted(data) {
   }
 }
 
+// calculates overall stats and also returns allData object which is the unaveraged data
 function calculateStats(dir, startstamp = 0, endstamp = today) {
   return new Promise((fulfill, reject) => {
     try {
@@ -217,6 +236,7 @@ function calculateStats(dir, startstamp = 0, endstamp = today) {
   })
 }
 
+// caches data from process date range and calculate stats
 function init(dir) {
   return new Promise((fulfill, reject) => {
     try {
