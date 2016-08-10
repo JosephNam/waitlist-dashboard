@@ -1,12 +1,12 @@
 import React, { PropTypes } from "react"
 import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
-// import Paper from "material-ui/Paper"
+import Paper from "material-ui/Paper"
 import VisualizationSelection from "./Tabs"
 import FilterContainer from "../containers/FilterContainer"
 import StatBadges from "./StatBadges"
 import { VisualizationFilters } from "../actions/VisualizationActions"
-// import RestaurantsTable from "./RestaurantsTable"
+import RestaurantsTable from "./RestaurantsTableTemp"
 import FilterSettings from "./SettingsList"
 import Graph from "../Graph"
 
@@ -99,6 +99,11 @@ export default class Dashboard extends React.Component {
                         data={this.props.data}
                         graphType={this.props.visualizationFilter}
                       />
+                      <Paper zDepth={1}>
+                        <RestaurantsTable
+                          data={this.props.data}
+                        />
+                      </Paper>
                     </div>
                   </div>
                 </div>
