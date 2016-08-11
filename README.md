@@ -1,6 +1,11 @@
 # waitlist-dashboard
 Visualize waitlist prediction times and mixpanel funnels.
 
+## random tidbits
+using ducks organizational structure
+didn't completely finish refactor
+need to move some of these container components into a better structure, probably can just pass props
+
 ## Local Development
 * `bower install` -- install client dependencies
 * `npm install` -- install server dependencies
@@ -27,15 +32,5 @@ Visualize waitlist prediction times and mixpanel funnels.
 * [PP Singularity Request](http://singularity-qa-uswest2.otenv.com/request/pp-waitlist-dashboard)
 
 ----
-
-## Breakdown of the code structure (WIP)
-### server requests data from three possible sources
-  - source for mixpanel
-  - source for spark stuff
-  - source for actual historical data
-
-### server sends data to client
-  - [data] -> [visualization container] -> [visualization]
-
-### if client chooses diff type of vis than the current
-  - [visualization container] -> [action] -> [reducer] -> [store] -> [update visualization component]
+# brief break down
+fetchData() -> data -> receiveData() -> propagate data as a prop down to components -> getVisible helper from VisualizationHelpers -> renders graph based on what is current visualization filters

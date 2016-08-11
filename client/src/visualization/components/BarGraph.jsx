@@ -1,6 +1,7 @@
 /* global Plotly: true */
 import React, { PropTypes } from "react"
 import _ from "lodash"
+import { COLORS } from "../../helpers/ColorHelpers"
 
 const propTypes = {
   windowWidth: PropTypes.number,
@@ -40,7 +41,10 @@ export default class BarGraph extends React.Component {
         name: `Party Size ${i}`,
         x,
         y,
-        type: "bar"
+        type: "bar",
+        marker: {
+          color: COLORS[`${list[0].party_size}`]
+        }
       }
       this.traces.push(plt)
     })
@@ -79,7 +83,10 @@ export default class BarGraph extends React.Component {
           name: `Party Size ${i}`,
           x,
           y,
-          type: "bar"
+          type: "bar",
+          marker: {
+            color: COLORS[`${list[0].party_size}`]
+          }
         }
       } else {
         plt = {
