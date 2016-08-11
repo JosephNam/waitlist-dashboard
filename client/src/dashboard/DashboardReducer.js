@@ -6,7 +6,7 @@ import {
   SET_START_STAMP, SET_RID,
   SET_SELECTED_ROWS, SET_SELECTED_POINT,
   RECEIVE_OVERQUOTED, SET_PARTY_SIZES
-} from "../actions/DashboardActions"
+} from "./DashboardActions"
 
 const initialState = new Map({
   dataFilter: {

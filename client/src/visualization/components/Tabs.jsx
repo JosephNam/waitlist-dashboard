@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react"
 import { Tabs, Tab } from "material-ui/Tabs"
-import Store from "../Store"
-import { setVisualizationFilter, VisualizationFilters } from "../actions/VisualizationActions"
+import Store from "../../Store"
+import { setVisualizationFilter, VisualizationFilters } from "../VisualizationActions"
 
 function switchFilter(filter) {
   Store.dispatch(setVisualizationFilter(filter))

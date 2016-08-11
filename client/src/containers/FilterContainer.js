@@ -1,7 +1,6 @@
 import { connect } from "react-redux"
-import { fetchData } from "../actions/DashboardActions"
-
-import FilterInput from "../components/FilterInput"
+import { fetchData } from "../dashboard/DashboardActions"
+import FilterInput from "../dashboard/components/FilterInput"
 
 const mapStateToProps = (state) => ({
   rid: state.dashboard.get("rid"),

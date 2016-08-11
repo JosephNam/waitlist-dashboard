@@ -4,9 +4,9 @@ import Subheader from "material-ui/Subheader"
 import Divider from "material-ui/Divider"
 import Checkbox from "material-ui/Checkbox"
 import Paper from "material-ui/Paper"
-import PartySizeControl from "./PartySizeControl"
 import ContentSend from "material-ui/svg-icons/action/timeline"
-import { COLORS } from "../helpers/ColorHelpers"
+import PartySizeControl from "./PartySizeControl"
+import { COLORS } from "../../helpers/ColorHelpers"
 
 
 const styles = {
@@ -37,42 +37,42 @@ const FilterSettings = (props) => (
         <Subheader>Line Graph Legend</Subheader>
         <ListItem
           primaryText="availability"
-          disabled={true}
+          disabled
           leftCheckbox={
             <Checkbox
               id={1}
               key={1}
               checkedIcon={<ContentSend />}
               uncheckedIcon={<ContentSend />}
-              checked={true}
+              checked
               iconStyle={{ fill: COLORS.ESTIMATED }}
             />
           }
         />
         <ListItem
           primaryText="actual"
-          disabled={true}
+          disabled
           leftCheckbox={
             <Checkbox
               id={2}
               key={2}
               checkedIcon={<ContentSend />}
               uncheckedIcon={<ContentSend />}
-              checked={true}
+              checked
               iconStyle={{ fill: COLORS.ACTUAL }}
             />
           }
         />
         <ListItem
           primaryText="quoted"
-          disabled={true}
+          disabled
           leftCheckbox={
             <Checkbox
               id={2}
               key={2}
               checkedIcon={<ContentSend />}
               uncheckedIcon={<ContentSend />}
-              checked={true}
+              checked
               iconStyle={{ fill: COLORS.QUOTED }}
             />
           }

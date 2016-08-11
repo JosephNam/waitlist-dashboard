@@ -1,14 +1,16 @@
 import React, { PropTypes } from "react"
+import { connect } from "react-redux"
 import CircularProgress from "material-ui/CircularProgress"
 import LinearProgress from "material-ui/LinearProgress"
 import Paper from "material-ui/Paper"
-import VisualizationSelection from "./Tabs"
+import VisualizationSelection from "../visualization/components/Tabs"
 import FilterContainer from "../containers/FilterContainer"
-import StatBadges from "./StatBadges"
-import { VisualizationFilters } from "../actions/VisualizationActions"
-import RestaurantsTable from "./RestaurantsTableTemp"
-import FilterSettings from "./SettingsList"
-import Graph from "../Graph"
+import StatBadges from "./components/StatBadges"
+import { VisualizationFilters } from "../visualization/VisualizationActions"
+import RestaurantsTable from "../table/RestaurantsTable"
+import FilterSettings from "./components/SettingsList"
+import { fetchData, reload, setSelectedPoint } from "./DashboardActions"
+import Graph from "../visualization/Graph"
 
 
 const propTypes = {
@@ -37,7 +39,7 @@ const propTypes = {
   desired: PropTypes.object
 }
 
-export default class Dashboard extends React.Component {
+class DashboardComponent extends React.Component {
   constructor(props) {
     super(props)
     this.filter = {
@@ -137,4 +139,37 @@ export default class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = propTypes
+DashboardComponent.propTypes = propTypes
+
+const mapStateToProps = (state) => ({
+  data: state.dashboard.get("data"),
+  isLoadingData: state.dashboard.get("isLoadingData"),
+  overquoted: state.dashboard.get("overquoted"),
+  windowWidth: state.dashboard.get("windowWidth"),
+  visualizationFilter: state.visualization.get("visualizationFilter"),
+  isInitialLoad: state.dashboard.get("isInitialLoad"),
+  selectedRows: state.dashboard.get("selectedRows"),
+  party_sizes: state.dashboard.get("party_sizes"),
+  selectedStructure: state.dashboard.get("selectedStructure"),
+  startStamp: state.dashboard.get("startStamp"),
+  endStamp: state.dashboard.get("endStamp")
+})
+
+const mapDispatchToProps = (dispatch) => (
+  {
+    load: (url, partySizes, filters, isInitial) => {
+      dispatch(fetchData(url, partySizes, filters, isInitial))
+    },
+    submitSelectedPoint: (selectedPoint, selectedRaw, data) => {
+      dispatch(setSelectedPoint(selectedPoint, selectedRaw, data))
+    },
+    reloadData: (partySizes, filter) => { dispatch(reload(partySizes, filter)) }
+  }
+)
+
+const Dashboard = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DashboardComponent)
+
+export default Dashboard

@@ -4,7 +4,7 @@ import _ from "lodash"
 import ToggleCheckBox from "material-ui/svg-icons/toggle/check-box"
 import ToggleCheckBoxOutlineBlank from "material-ui/svg-icons/toggle/check-box-outline-blank"
 import { ListItem } from "material-ui/List"
-import { COLORS } from "../helpers/ColorHelpers"
+import { COLORS } from "../../helpers/ColorHelpers"
 
 export default class PartySizeControl extends React.Component {
   constructor(props) {

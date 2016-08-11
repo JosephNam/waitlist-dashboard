@@ -1,6 +1,6 @@
 import { Map } from "immutable"
 import { SET_VISUALIZATION_FILTER, VisualizationFilters
-} from "../actions/VisualizationActions"
+} from "./VisualizationActions"
 
 const initialState = new Map({
   visualizationFilter: VisualizationFilters.SCATTER_PLOT

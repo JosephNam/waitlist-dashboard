@@ -2,7 +2,7 @@
 /* global window: true */
 import React, { PropTypes } from "react"
 import _ from "lodash"
-import { COLORS } from "./helpers/ColorHelpers"
+import { COLORS } from "../helpers/ColorHelpers"
 
 /*
  * form of graphType
