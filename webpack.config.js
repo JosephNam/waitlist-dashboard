@@ -3,7 +3,7 @@ const path = require('path')
 
 module.exports = {
   entry: [
-    './client/src/app.js'
+    './client/src/app.jsx'
   ],
   output: {
     path: path.resolve(__dirname, './client/output/'),

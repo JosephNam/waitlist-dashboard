@@ -1,29 +1,16 @@
 /* global Plotly: true */
-/* global window: true */
 import React, { PropTypes } from "react"
 import _ from "lodash"
-import { COLORS } from "../helpers/ColorHelpers"
 
-/*
- * form of graphType
- * {
- *   plotly_type: string,
- *   mode: string,
- *   title: string
- * }
- */
 const propTypes = {
   windowWidth: PropTypes.number,
-  data: PropTypes.array,
-  graphType: PropTypes.object
+  data: PropTypes.array
 }
 
-export default class Graph extends React.Component {
+export default class LineGraph extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      graphType: props.graphType
-    }
+    this.state = {}
     this.state.layout = {
       xaxis: {
         type: "date",
@@ -35,44 +22,41 @@ export default class Graph extends React.Component {
       width: (this.props.windowWidth / 12) * 8,
       height: 600
     }
-    // prepare graph for initial render
+    this.state.data = this.props.data
+
+    const data = {}
+    _.forEach(this.state.data, (datum) => {
+      if (!data[`${datum.party_size}`]) {
+        data[`${datum.party_size}`] = []
+      }
+      data[`${datum.party_size}`].push(datum)
+    })
+
     this.traces = []
-    _.forEach(this.props.data, (list, i) => {
+    _.forEach(data, (list, i) => {
       const x = _.map(list, (datum) => (datum.timestamp))
       const y = _.map(list, (datum) => (datum.actual))
-      const size = _.map(list, (datum) => (datum.size + 5))
       const plt = {
         name: `Party Size ${i}`,
         x,
         y,
-        mode: this.state.graphType.mode,
-        type: this.state.graphType.plotly_type,
-        marker: {
-          size
-        }
+        mode: "lines"
       }
       this.traces.push(plt)
     })
   }
-
   componentDidMount() {
     // work on DOM after render per facebook guidelines
-    Plotly.newPlot("visualization", this.traces)
+    Plotly.newPlot("visualization", this.traces, this.state.layout)
   }
-
   componentWillReceiveProps(np) {
     // set next state
     this.setState({
-      data: np.data,
-      graphType: np.graphType
+      data: np.data
     })
   }
-
-  /*
-   * necessary to avoid unecessary render updates in the middle of render
-   */
   shouldComponentUpdate(np, ns) {
-    return this.state.data !== ns.data || this.state.graphType !== ns.graphType
+    return this.state.data !== ns.data
   }
 
   componentDidUpdate() {
@@ -88,7 +72,6 @@ export default class Graph extends React.Component {
     _.forEach(data, (list, i) => {
       const x = _.map(list, (datum) => (datum.timestamp))
       const y = _.map(list, (datum) => (datum.actual))
-      const size = _.map(list, (datum) => (datum.size + 5))
       let plt
       // if there is data render the graph, else render a default no data found graph
       if (list[0]) {
@@ -96,26 +79,19 @@ export default class Graph extends React.Component {
           name: `Party Size ${i}`,
           x,
           y,
-          mode: this.state.graphType.mode,
-          type: this.state.graphType.plotly_type,
-          marker: {
-            color: COLORS[`${list[0].party_size}`],
-            size
-          }
+          mode: "lines"
         }
       } else {
         plt = {
           name: "No Data Found",
           x,
           y,
-          mode: this.state.graphType.mode,
-          type: this.state.graphType.plotly_type
+          mode: "lines"
         }
       }
       newTraces.push(plt)
     })
     this.traces = newTraces
-    console.log(newTraces)
     Plotly.newPlot("visualization", newTraces, this.state.layout)
   }
 
@@ -128,8 +104,4 @@ export default class Graph extends React.Component {
   }
 }
 
-Graph.propTypes = propTypes
-
-Graph.defaultProps = {
-  data: []
-}
+LineGraph.propTypes = propTypes

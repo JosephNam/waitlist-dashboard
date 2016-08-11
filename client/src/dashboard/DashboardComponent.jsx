@@ -6,12 +6,11 @@ import Paper from "material-ui/Paper"
 import VisualizationSelection from "../visualization/components/Tabs"
 import FilterContainer from "../containers/FilterContainer"
 import StatBadges from "./components/StatBadges"
-import { VisualizationFilters } from "../visualization/VisualizationActions"
+import { VisualizationFilters } from "../ducks/visualization"
 import RestaurantsTable from "../table/RestaurantsTable"
 import FilterSettings from "./components/SettingsList"
-import { fetchData, reload, setSelectedPoint } from "./DashboardActions"
-import Graph from "../visualization/Graph"
-
+import { fetchData, reload, setSelectedPoint } from "../ducks/dashboard"
+import getVisible from "../helpers/VisualizationHelpers"
 
 const propTypes = {
   load: PropTypes.func,
@@ -96,11 +95,9 @@ class DashboardComponent extends React.Component {
                     </div>
                     <div id="visualization" className="col l9 m12 s10 offset-s1">
                       <VisualizationSelection />
-                      <Graph
-                        windowWidth={this.props.windowWidth}
-                        data={this.props.data}
-                        graphType={this.props.visualizationFilter}
-                      />
+                      {getVisible(this.props.visualizationFilter,
+                        this.props.data,
+                        this.props.windowWidth)}
                       <Paper zDepth={1}>
                         <RestaurantsTable
                           data={this.props.data}

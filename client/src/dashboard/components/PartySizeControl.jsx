@@ -10,7 +10,7 @@ export default class PartySizeControl extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      checked: [1, 2, 3, 4, 5, 6]
+      checked: [0, 1, 2, 3, 4, 5, 6]
     }
     this.handleToggle = this.handleToggle.bind(this)
   }

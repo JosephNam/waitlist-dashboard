@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react"
 import { Tabs, Tab } from "material-ui/Tabs"
 import Store from "../../Store"
-import { setVisualizationFilter, VisualizationFilters } from "../VisualizationActions"
+import { setVisualizationFilter, VisualizationFilters } from "../../ducks/visualization"
 
 function switchFilter(filter) {
   Store.dispatch(setVisualizationFilter(filter))
@@ -27,6 +27,11 @@ export default class VisualizationSelection extends React.Component {
           <Tab
             label={`${VisualizationFilters.LINE_GRAPH.title}`}
             value={VisualizationFilters.LINE_GRAPH}
+            style={{ backgroundColor: "rgb(218, 55, 67)" }}
+          />
+          <Tab
+            label={`${VisualizationFilters.BAR_GRAPH.title}`}
+            value={VisualizationFilters.BAR_GRAPH}
             style={{ backgroundColor: "rgb(218, 55, 67)" }}
           />
         </Tabs>

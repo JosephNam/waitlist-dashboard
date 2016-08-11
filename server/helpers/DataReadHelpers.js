@@ -193,7 +193,7 @@ function getOverQuoted(data) {
 
   const highOverquoteLength = (_.filter(data, (datum) => (
     (datum.quoted - datum.actual) > 10 && datum.actual !== 0))).length
-  const waitDataLength = lowOverquoteLength + highOverquoteLength
+  const waitDataLength = data.length
   const lowOverquote = (lowOverquoteLength / waitDataLength) * 100
   const highOverquote = (highOverquoteLength / waitDataLength) * 100
   return {
@@ -202,6 +202,16 @@ function getOverQuoted(data) {
   }
 }
 
+function getJoins(data) {
+  const online = (_.filter(data, { type: "online" })).length
+  const walkin = (_.filter(data, { type: "walkin" })).length
+  const percentOnline = (online / data.length) * 100
+  const percentWalkin = (walkin / data.length) * 100
+  return {
+    percentOnline,
+    percentWalkin
+  }
+}
 // calculates overall stats and also returns allData object which is the unaveraged data
 function calculateStats(dir, startstamp = 0, endstamp = today) {
   return new Promise((fulfill, reject) => {
@@ -224,9 +234,11 @@ function calculateStats(dir, startstamp = 0, endstamp = today) {
           })
           const allData = _.flatten(data)
           const overquotes = getOverQuoted(allData)
+          const joins = getJoins(allData)
           fulfill({
             allData,
-            overquotes
+            overquotes,
+            joins
           })
         })
       })

@@ -1,3 +1,5 @@
+import { Map } from "immutable"
+
 export const SET_VISUALIZATION_FILTER = "SET_VISUALIZATION_FILTER"
 export const FETCH_DATA = "FETCH_DATA"
 export const REQUEST_DATA = "REQUEST_DATA"
@@ -39,4 +41,15 @@ export function receiveData(data) {
     data
   }
 }
+const initialState = new Map({
+  visualizationFilter: VisualizationFilters.SCATTER_PLOT
+})
 
+export default function visualization(state = initialState, action) {
+  switch (action.type) {
+    case SET_VISUALIZATION_FILTER:
+      return state.set("visualizationFilter", action.filter)
+    default:
+      return state
+  }
+}

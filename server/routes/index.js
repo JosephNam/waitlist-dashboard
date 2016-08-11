@@ -43,7 +43,7 @@ datahelper.init("./server/mocks/waitlistService/").then((cache) => {
 
   router.get("/overquoted", (req, res) => {
     logger.info("received request to /overquoted")
-    res.json(cache.overquotes.lowOverquote)
+    res.json(cache.overquotes)
   })
 })
 module.exports = router

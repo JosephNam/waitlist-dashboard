@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { fetchData } from "../dashboard/DashboardActions"
+import { fetchData } from "../ducks/dashboard"
 import FilterInput from "../dashboard/components/FilterInput"
 
 const mapStateToProps = (state) => ({
@@ -25,4 +25,5 @@ const FilterContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(FilterInput)
+
 export default FilterContainer

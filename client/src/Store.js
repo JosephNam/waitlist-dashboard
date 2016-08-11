@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from "redux"
 import thunk from "redux-thunk"
-import visualization from "./visualization/VisualizationReducers"
-import dashboard from "./dashboard/DashboardReducer"
+import visualization from "./ducks/visualization"
+import dashboard from "./ducks/dashboard"
 
 const Store = createStore(
   combineReducers({
